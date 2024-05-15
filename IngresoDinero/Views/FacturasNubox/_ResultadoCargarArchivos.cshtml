@@ -1,0 +1,87 @@
+﻿@using IngresoDinero.clases;
+@model IEnumerable<ListadoCargaFacturas>
+<table id="tabla_carga" class="table table-striped table-hover table-bordered table-responsive shadow-sm tbl-sm">
+    <thead class="thead-corp">
+        <tr>
+            <th>Ingreso</th>
+            <th>Tipo</th>
+            <th>Fecha</th>
+            <th>N° Cot.</th>
+            <th>Rut</th>
+            <th>Cliente</th>
+            <th>Proyecto</th>
+            <th>Dirección</th>
+            <th>Unidad</th>
+            <th>Monto</th>
+            <th>Forma Pago</th>
+            <th>N° Serie</th>
+            <th>Fecha TF/Ven.</th>
+            <th>Abonable PIE</th>
+            <th>ESTADO</th>
+            <th>Fecha Facturación</th>
+            <th>Folio Factura</th>
+            <th>Doc. Factura</th>
+            <th>Mensaje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="@(item.b_regularizado == "1" ? "table-danger" : "")">
+                <td>
+                    @item.id_ing
+                </td>
+                <td>
+                    @if (item.b_regularizado == "1")
+                    {
+                        <span>&nbsp;(R)</span>
+                    }
+                    @item.g_tipo
+                </td>
+                <td>@item.f_fecha.Replace(" 0:00:00", "")</td>
+                <td>
+                    @if (item.id_folio != "0")
+                    {
+                        if (item.id_tipo_cot == "1")
+                        {
+                            <a href="/Cotizaciones/Cotizaciones/Modificar?idcotizacion=@Encrypt.Base64_Encode(item.id_folio)&tipo=1" data-fancybox data-type="iframe" data-idle-time="false">@item.id_folio</a>
+                        }
+                        else
+                        {
+                            <a href="/CotFlex/Cotizaciones/Modificar?idcotizacion=@(item.id_folio)&tipo=0" data-fancybox data-type="iframe" data-idle-time="false">@item.id_folio</a>
+                        }
+                    }
+                </td>
+                <td>@item.rut_cliente</td>
+                <td>@item.nombre_cliente</td>
+                <td>@item.g_nom_pry</td>
+                <td>@item.g_direccion_pry</td>
+                <td>@item.g_unidad</td>
+                <td>@item.v_monto</td>
+                <td>@item.g_forma_pago</td>
+                <td>@item.g_serie</td>
+                <td>@item.f_vencimiento</td>
+                <td>@item.g_abonable_pie</td>
+                <td>@item.g_estado</td>
+                <td>@item.f_facturacion</td>
+                <td>@item.folio_factura</td>
+                <td align="center">
+                    @if (item.g_factura != "")
+                    {
+                        <a href="@item.g_factura" target="_blank" data-toggle="tooltip" data-placement="top" title="Ver Factura"><i class="fas fa-file-pdf color2"></i></a>
+                    }
+                </td>
+                <td>@item.mensaje</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $(function () {
+        var tabla_carga = $("#tabla_carga").DataTable();
+        $('#tabla_carga [data-toggle="tooltip"]').tooltip();
+        tabla_carga.on('draw', function () {
+            $('#tabla_carga [data-toggle="tooltip"]').tooltip();
+        });
+    });
+</script>

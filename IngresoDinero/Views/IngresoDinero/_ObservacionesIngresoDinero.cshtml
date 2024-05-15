@@ -1,0 +1,128 @@
+﻿@*@model IEnumerable<IngresoDinero.clases.ObservacionIngresoDinero>*@
+@model IEnumerable<IngresoDinero.clases.IngresosDinero>
+@{
+    //int IdUsuario = int.Parse(Request.Cookies["cookiePerfil"]["usuario"].ToString());
+    int id_ingreso = ViewBag.id_ingreso;
+}
+
+
+@foreach (var item in Model)
+{
+    @*<input type="hidden" name="obs_id_pago" id="obs_id_pago" value="@item.id_pago" />
+        <input type="hidden" name="obs_id_contrato" id="obs_id_contrato" value="@item.id_contrato" />
+        <input type="hidden" name="obs_id_prop_arriendo" id="obs_id_prop_arriendo" value="@item.id_prop_arriendo" />*@
+    @*<div style="font-size:14px; border-bottom:1px solid #ff8000; margin-bottom:5px; width:100%">Observación del Mes <strong>@item.periodo</strong></div>*@
+
+    <div style="font-size:12px; margin-top:10px;">
+        <div class="celda" style="width:15%">id ingreso: @item.id_ing</div>
+    </div>
+    <div align="center" style="padding:0; margin-top: 10px; ">
+        <div>
+            <textarea name="obs_comentarios" id="obs_comentarios" rows="4" style="width:95%"></textarea>
+        </div>
+    </div>
+    <div style="font-size:12px;">
+        @*<div class="celda" style="width:15%">Dirección:</div><div class="celda" style="width:40%">@item.direccion</div>
+            <div class="celda" style="width:20%">Departamento:</div><div class="celda" style="width:15%">@item.num_depto</div>*@
+    </div>
+
+    @*<div style="width:99%; text-align:center;  margin-top: 20px;">
+            <div class="celda ancho" style="width:100px; margin-left:10px">
+                <div class="boton" id="boton_grabar_observacion" style="width:70px;">Grabar</div>
+            </div>
+        </div>*@
+
+    <br />
+    <div>
+
+        <table class="table table-bordered table-condensed table-hover" style="font-size: 11px;" height="25%">
+            <thead>
+                <tr style="background:#eeefff;">
+                    <th>Usuario</th>
+                    <th>Fecha Observacion</th>
+                    <th>Observacion</th>
+                    <th style="display:none">id usuario</th>
+                    <th style="display:none">id ingreso</th>
+                </tr>
+            </thead>
+            @foreach (var obs in IngresoDinero.Models.IngresoDineroModel.Llama_Ingreso_Actualiza_Observacion_Carga(1, id_ingreso, 0, "", ""))
+            {
+                <tbody>
+                    <tr>
+                        <td>@obs.g_nom_usu</td>
+                        <td>@obs.f_observacion</td>
+                        <td>@obs.g_observacion</td>
+                        <td style="display:none">@obs.id_usu</td>
+                        <td style="display:none">@obs.id_ingreso</td>
+                    </tr>
+                </tbody>
+
+                
+            }
+        </table>
+    </div>
+}
+<script>
+    $(function () {
+        @*$("#boton_grabar_observacion").click(function () {
+            //_ModificaObservacionPago(int id_pago, string observacion)
+            //retorno = Resultados["estado"].ToString() + "|" + Resultados["mensaje"].ToString() + "|" + Resultados["id_cuota"].ToString();
+            var param = { "id_pago": $("#obs_id_pago").val(), "observacion": $("#obs_comentarios").val() };
+            $.ajax({
+                data: param,
+                url: "@Url.Action("_ModificaObservacionPago", "liquidacion")",
+                type: "post",
+                beforeSend: function(){
+                    $("#mensajito_obs").html("Un momento por favor.");
+                },
+                success: function (response) {
+                    var ret = response.split('|');
+                    alert(ret[1]);
+                    //$("#cont_comentario").html(response);
+                }
+            });
+            //alert("GRACIAS");
+            cerrar_ventana('#agregar_comentario');
+        });*@
+
+
+        $("#obs_comentarios").change(function () {
+
+            var id_ingreso = @id_ingreso;
+            var proc = 0;
+            var observacion = $("#obs_comentarios").val();
+            var param = {
+                "proc": proc,
+                "id_ingreso": id_ingreso,
+                "observacion": observacion,
+                "g_nom_usu": ""
+            };
+            $.ajax({
+                data: param,
+                url: "@Url.Action("_Agregar_Observacion_IngresoDinero", "IngresoDinero")",
+                type: "post",
+                beforeSend: function () {
+                    $("#mensajito_obs").html("Un momento por favor.");
+                },
+                success: function (response) {
+                    alert("Observacion Grabada");
+                }
+            });
+        });
+    });
+
+    @*function cargar_tabla() {
+
+        var id_pago = @id_pago;
+        var proc = 1;
+        var observacion = "";
+        var id_usuario = @IdUsuario;
+        var param = {
+            "proc": proc,
+            "id_pago": id_pago,
+            "id_usuario":id_usuario,
+            "observacion": observacion
+        };
+
+    }*@
+</script>

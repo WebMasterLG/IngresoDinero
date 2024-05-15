@@ -1,0 +1,91 @@
+﻿@using IngresoDinero.clases;
+@using IngresoDinero.Models;
+@model IEnumerable<Datos_Inmobiliaria>
+@{
+    //string idPerfil = Request.Cookies["cookiePerfil"]["perfil"].ToString();
+}
+<div class="modal-header bg-color2">
+    <h5 class="modal-title font-weight-bold">Datos Facturación</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    @foreach (var item in Model)
+    {
+        <input type="hidden" id="id_inmob" name="id_inmob" value="@item.id_inmob" />
+        <div class="form-group row">
+            <label for="g_rut_inmob" class="col-md-3 col-form-label font-weight-bold color2">RUT</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control rut" id="g_rut_inmob" name="g_rut_inmob" value="@item.g_rut" />
+                <div class="invalid-feedback">RUT inválido</div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="g_razon_social_inmob" class="col-md-3 col-form-label font-weight-bold color2">Razón Social</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" id="g_razon_social_inmob" name="g_razon_social_inmob" value="@item.g_razon_social" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="g_giro_inmob" class="col-md-3 col-form-label font-weight-bold color2">Giro</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" id="g_giro_inmob" name="g_giro_inmob" value="@item.g_giro" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="g_direccion_inmob" class="col-md-3 col-form-label font-weight-bold color2">Dirección</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" id="g_direccion_inmob" name="g_direccion_inmob" value="@item.g_direccion" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="comuna_inmob" class="col-md-3 col-form-label font-weight-bold color2">Comuna</label>
+            <div class="col-md-9">
+                <select class="s2" id="comuna_inmob" name="comuna_inmob">
+                    <option></option>
+                    @{
+                        List<listascombobox> lst22 = ComisionesModels.ListasCombobox(5, null);
+                        foreach (var item2 in lst22)
+                        {
+                            <option value="@item2.id" @(item.id_comuna == item2.id.ToString() ? "selected" : "")>@item2.descripcion</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="g_contacto_inmob" class="col-md-3 col-form-label font-weight-bold color2">Contacto</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" id="g_contacto_inmob" name="g_contacto_inmob" value="@item.g_contacto" />
+            </div>
+        </div>
+    }
+</div>
+<div class="modal-footer">
+    <div class="text-center w-100">
+        <button type="button" class="btn btn-color2 px-4 mx-3" id="btn_guardar_inmob">Guardar</button>
+        <button type="button" class="btn btn-secondary px-4 mx-3" data-dismiss="modal">Cerrar</button>
+    </div>
+</div>
+
+<script>
+    $("input.rut").rut({
+        useThousandsSeparator: true,
+        validateOn: 'change',
+    }).on('rutInvalido', function (e) {
+        var $input = $(this);
+        if ($input.val().length > 0 || $input.prop('required')) {
+            $input.addClass('is-invalid');
+            $input.next('.invalid-feedback').show();
+            $input.focus();
+        } else {
+            $input.removeClass('is-invalid');
+            $input.next('.invalid-feedback').hide();
+        }
+    }).on('rutValido', function (e, rut, dv) {
+        var $input = $(this);
+        $input.removeClass('is-invalid');
+        $input.next('.invalid-feedback').hide();
+    });
+</script>

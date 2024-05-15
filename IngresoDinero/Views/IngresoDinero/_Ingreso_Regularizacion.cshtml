@@ -1,0 +1,281 @@
+﻿@using IngresoDinero.clases;
+@using IngresoDinero.Helpers;
+@using IngresoDinero.Models;
+@model IEnumerable<IngresosDinero>
+@{
+
+    //int id_usu = int.Parse(Request.Cookies["cookiePerfil"]["usuario"].ToString());
+    //int idPerfil = int.Parse(Request.Cookies["cookiePerfil"]["perfil"].ToString());
+    //int idSubper = int.Parse(Request.Cookies["cookiePerfil"]["idSubper"].ToString());
+    //int idArea = int.Parse(Request.Cookies["cookiePerfil"]["idArea"].ToString());
+
+    int id_usu = 10008;
+    int idPerfil = 10;
+    int idSubper = 6;
+    int idArea = 8;
+
+    //string idPerfil = Request.Cookies["cookiePerfil"]["perfil"].ToString();
+    List<perfilamiento> itemselect = ComisionesModels.Llama_Perfilamiento_Filtros_Default_Front(id_usu, "COMISION_INMOBILIARIA", "PRINCIPAL");
+
+    string[] select_estado_promesa = itemselect[0].g_estado_promesa.Split(',');
+    string[] select_estado_factura = itemselect[0].g_estado_factura.Split(',');
+
+    int id_ingreso = ViewBag.id_ingreso;
+}
+<div style="margin:0 auto;">
+        <table id="tabla_regularizaciones" cellpadding="0" cellspacing="0" class="table table-striped table-hover shadow-sm tbl-sm table-editable">
+            <thead class="thead-corp">
+                <tr>
+                    <th @*style="width: 6rem;"*@>Tipo</th>
+                    <th @*style="width: 1%;"*@>Fecha</th>
+                    <th style="width: 4rem;">N° Cot.</th>
+                    <th @*style="width: 6rem;"*@>Rut</th>
+                    <th @*style="width: 8rem;"*@>Cliente</th>
+                    @*<th>Proyecto</th>*@
+                    @*<th>Dirección</th>*@
+                    @*<th>Unidad</th>*@
+                    <th @*style="width: 5rem;"*@>Monto</th>
+                    <th style="width: 9rem;">Forma Pago</th>
+                    <th>Banco</th>
+                    <th>Cta. Cte.</th>
+                    <th>Serie</th>
+                    <th @*style="width: 1%;"*@>Fecha TF/Ven.</th>
+                    <th @*style="width: 1%;"*@>Abonable</th>
+                    <th @*style="width: 1%;"*@>ESTADO</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="table-secondary">
+                        <td>
+                            <input type="text" class="g_tipo" name="g_tipo_@item.id_ing" id="g_tipo_@item.id_ing" value="@item.g_tipo" id_ing="@item.id_ing" readonly />
+                        </td>
+                        <td>
+                            <input type="date" class="f_fecha" name="f_fecha_@item.id_ing" id="f_fecha_@item.id_ing" value="@DateTime.Parse(item.f_fecha==""?"1900-01-01":item.f_fecha).ToString("yyyy-MM-dd")" id_ing="@item.id_ing" readonly />
+                            @*@item.f_fecha.Replace(" 0:00:00", "")*@
+                        </td>
+                        <td>
+                            <input type="text" class="id_folio" name="id_folio_@item.id_ing" id="id_folio_@item.id_ing" value="@item.id_folio" id_ing="@item.id_ing" readonly />
+                        </td>
+                        <td>
+                            <input type="text" class="rut_cliente" name="rut_cliente_@item.id_ing" id="rut_cliente_@item.id_ing" value="@item.rut_cliente" id_ing="@item.id_ing" readonly />
+                        </td>
+                        <td>
+                            <input type="text" class="nombre_cliente" name="nombre_cliente_@item.id_ing" id="nombre_cliente_@item.id_ing" value="@item.nombre_cliente" id_ing="@item.id_ing" readonly />
+                        </td>
+                        @*<td>
+                            <input type="text" class="g_nom_pry" name="g_nom_pry_@item.id_ing" id="g_nom_pry_@item.id_ing" value="@item.g_nom_pry" id_ing="@item.id_ing" readonly />
+                        </td>*@
+                        @*<td>
+                            <input type="text" class="g_direccion_pry" name="g_direccion_pry_@item.id_ing" id="g_direccion_pry_@item.id_ing" value="@item.g_direccion_pry" id_ing="@item.id_ing" readonly/>
+                        </td>*@
+                        @*<td>
+                            <input type="text" class="g_unidad" name="g_unidad_@item.id_ing" id="g_unidad_@item.id_ing" value="@item.g_unidad" id_ing="@item.id_ing" readonly />
+                        </td>*@
+                        <td>
+                            <input type="text" class="v_monto" name="v_monto_@item.id_ing" id="v_monto_@item.id_ing" value="@item.v_monto" id_ing="@item.id_ing" readonly />
+                        </td>
+                        <td>
+                            <select class="id_forma_pago" id="id_forma_pago_@item.id_ing" name="id_forma_pago_@item.id_ing" style="pointer-events: none;">
+                                <option value="0"></option>
+                                @{
+                                    List<listascombobox> lst2 = ComisionesModels.ListasCombobox(8, null);
+                                    foreach (var item2 in lst2)
+                                    {
+                                        <option value="@item2.id" @(item.id_forma_pago == item2.id.ToString() ? "selected" : "")>@item2.descripcion</option>
+                                    }
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <select class="id_banco" id="id_banco_@item.id_ing" name="id_banco_@item.id_ing" style="pointer-events: none;">
+                                <option value="0"></option>
+                                @{
+                                    List<listascombobox> lstBanco = ComisionesModels.ListasCombobox(25, null);
+                                    foreach (var item2 in lstBanco)
+                                    {
+                                        <option value="@item2.id" @(item.id_banco == item2.id.ToString() ? "selected" : "")>@item2.descripcion</option>
+                                    }
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="g_cta_cte" name="g_cta_cte_@item.id_ing" id="g_cta_cte_@item.id_ing" value="@item.g_cta_cte" id_ing="@item.id_ing" maxlength="30" readonly />
+                        </td>
+                        <td>
+                            <input type="text" class="g_serie" name="g_serie_@item.id_ing" id="g_serie_@item.id_ing" value="@item.g_serie" id_ing="@item.id_ing" readonly />
+                        </td>
+                        <td>
+                            <input type="date" class="f_vencimiento" name="f_vencimiento_@item.id_ing" id="f_vencimineto_@item.id_ing" value="@DateTime.Parse(item.f_vencimiento==""?"1900-01-01":item.f_vencimiento).ToString("yyyy-MM-dd")" id_ing="@item.id_ing" readonly />
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="g_abonable_pie" name="g_abonable_pie_@item.id_ing" id="g_abonable_pie_@item.id_ing" value="@item.g_abonable_pie" id_ing="@item.id_ing" style="pointer-events: none;" @(item.g_abonable_pie == "SI" ? "checked" : "") />
+                        </td>
+                        <td>
+                            <input type="text" class="g_estado" name="g_estado_@item.id_ing" id="g_estado_@item.id_ing" value="@item.g_estado" id_ing="@item.id_ing" readonly />
+                        </td>
+                    </tr>
+                }
+               
+            </tbody>
+        </table>
+
+        <input type="text" id="contador" name="contador" value="3" hidden />
+        <div class="text-center mt-4">
+            @*<div class="celda ancho" style="width:100px; margin-left:10px">
+                <div class="boton" style="width:89px;" id="btn_cambio_estado" onclick="">SI</div>
+            </div>*@
+            <button type="button" class="btn btn-color1 mx-4" onclick="agregarFila()">Agregar Fila</button>
+            <button type="button" class="btn btn-color2 mx-4" onclick="id_nueva_cuota(@id_ingreso)">Guardar</button>
+            <button type="button" class="btn btn-secondary mx-4" data-dismiss="modal">Cerrar</button>
+        </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        //$("#btn_agregar_fila").trigger("click");
+        agregarFila();
+    });
+
+    function ingresoRegulariza(data) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=UTF-8',
+				url: "@Url.Action("Ingreso_Regulariza", "IngresoDinero")",
+				type: 'POST'
+            })
+                .done(resolve)
+                .fail(function () {
+                    alert('Error al procesar la solicitud');
+                });
+        });
+    }
+
+    function agregarFila() {
+		var contador = $("#contador").val();
+
+        var $tablaRegularizar = $('#tabla_regularizaciones');
+		var $tr = $tablaRegularizar.find('tbody tr').last();
+		var $clone = $tr.clone();
+		$clone.addClass('nuevaFila');
+        $clone.removeClass('table-secondary');
+		$clone.attr('style', 'text-align: center');
+
+		//$clone.find('input:visible:not(.concepto)').val('');
+
+        //$clone.find('input.id_ing').attr('id', 'id_ing' + contador).attr('name', 'id_ing' + contador);
+        $clone.find('input.g_tipo').attr('id', 'g_tipo' + contador).attr('name', 'g_tipo' + contador);
+        $clone.find('input.f_fecha').attr('id', 'f_fecha' + contador).attr('name', 'f_fecha' + contador).removeAttr('readonly');
+        $clone.find('input.id_folio').attr('id', 'id_folio' + contador).attr('name', 'id_folio' + contador);
+        $clone.find('input.rut_cliente').attr('id', 'rut_cliente' + contador).attr('name', 'rut_cliente' + contador).removeAttr('readonly');
+        $clone.find('input.nombre_cliente').attr('id', 'nombre_cliente' + contador).attr('name', 'nombre_cliente' + contador).removeAttr('readonly');
+
+        //var $id_concepto = $clone.find('input.id_ing').attr('id', 'id_ing' + contador).attr('name', 'id_ing' + contador);
+
+        //$clone.find('input.g_nom_pry').attr('id', 'g_nom_pry' + contador).attr('name', 'g_nom_pry' + contador);
+        //$clone.find('input.g_direccion_pry').attr('id', 'g_direccion_pry' + contador).attr('name', 'g_direccion_pry' + contador);
+        //$clone.find('input.g_unidad').attr('id', 'g_unidad' + contador).attr('name', 'g_unidad' + contador);
+        $clone.find('input.v_monto').attr('id', 'v_monto' + contador).attr('name', 'v_monto' + contador).removeAttr('readonly');//.attr('Class','forma_pago inp_pago calculo_num_ope').attr('contador',contador);
+        // $clone.find('select.banco').attr('id', 'banco_pago' + contador).attr('name', 'banco_pago' + contador);
+        $clone.find('select.id_forma_pago').attr('id', 'id_forma_pago' + contador).attr('name', 'id_forma_pago' + contador).css('pointer-events', 'auto');
+        $clone.find('select.id_banco').attr('id', 'id_banco' + contador).attr('name', 'id_banco' + contador).css('pointer-events', 'auto');
+        $clone.find('input.g_cta_cte').attr('id', 'g_cta_cte' + contador).attr('name', 'g_cta_cte' + contador).removeAttr('readonly');
+        $clone.find('input.g_serie').attr('id', 'g_serie' + contador).attr('name', 'g_serie' + contador).removeAttr('readonly');
+
+
+        $clone.find('input.f_vencimiento').attr('id', 'f_vencimiento' + contador).attr('name', 'f_vencimiento' + contador).removeAttr('readonly');
+        $clone.find('input.g_abonable_pie').attr('id', 'g_abonable_pie' + contador).attr('name', 'g_abonable_pie' + contador).css('pointer-events', 'auto');
+        $clone.find('input').attr('id', 'g_estado' + contador).attr('name', 'g_estado' + contador);
+        //$clone.find('input.observacion').attr('id', 'observacion' + contador).attr('name', 'observacion' + contador);
+        //$clone.find('input.com_admin_por').attr('id', 'com_admin_por_cuot' + contador).attr('name', 'com_admin_por_cuot' + contador).attr('readonly', 'readonly');
+        //$clone.find('input.com_corretaje_por').attr('id', 'col_prop' + contador).attr('name', 'col_prop' + contador).attr('readonly', 'readonly');
+        $clone.find('td').last().html('<img onclick="eliminarFila()" src="@Url.Content("~/img/eliminar_azul.png")" title="Eliminar Cuota" style="cursor:pointer" />');//.append($id_concepto);
+		$tr.after($clone);
+        contador++;
+        $("#contador").val(contador);
+    }
+
+    function id_nueva_cuota(id_ingreso) {
+
+		if (confirm("¿Esta seguro que desea guardar los cambios?")) {
+
+
+			//var contador = $("#contador").val();
+            //var cuenta_atras = $("#contador").val();
+			//var id_contrato = $("#contrato").val();
+			//cuenta_atras--;
+            var lstIng = [];
+
+            $('#tabla_regularizaciones .nuevaFila').each(function () {
+                var $this = $(this);
+                var f_fecha = $this.find("input.f_fecha").val();
+                var rut_cliente = $this.find("input.rut_cliente").val();
+                var nombre_cliente = $this.find("input.nombre_cliente").val().trim();
+                var v_monto = $this.find("input.v_monto").val();
+                var id_forma_pago = $this.find("select.id_forma_pago").val();
+                var id_banco = $this.find("select.id_banco").val();
+                var g_cta_cte = $this.find("input.g_cta_cte").val().trim();
+                var g_serie = $this.find("input.g_serie").val().trim();
+                var f_vencimiento = $this.find("input.f_vencimiento").val();
+                var id_abonable_pie = $this.find("input.g_abonable_pie").is(':checked') ? 1 : 0;
+
+                if (f_fecha == "" || v_monto <= 0 || v_monto == "" || rut_cliente == "" || nombre_cliente == "") {
+                    alert("Debe ingresar campos obligatorios");
+                    $this.find("input.f_fecha").focus();
+				} else {
+                    lstIng.push({
+                        "id_ing": id_ingreso,
+                        "f_fecha": f_fecha,
+                        "rut_cliente": rut_cliente,
+                        "nombre_cliente": nombre_cliente,
+                        "v_monto": v_monto,
+                        "id_forma_pago": id_forma_pago,
+                        "id_banco": id_banco,
+                        "g_cta_cte": g_cta_cte,
+                        "g_serie": g_serie,
+                        "f_vencimiento": f_vencimiento,
+                        "id_abonable_pie": id_abonable_pie,
+                    });
+		        }
+            });
+
+            ingresoRegulariza(lstIng)
+                .then(function (res) {
+                    if (res.estado) {
+                        $('#modal_regularizacion').modal('hide');
+                        $('#btnBuscar').trigger('click');
+                    } else {
+                        alert(res.mensaje);
+                    }
+                });
+
+			@*$.ajax({
+				data: param,
+				url: "@Url.Action("_Pagos_Duplica_Cuota_2", "cobros")",
+				type: "POST",
+				async: true,
+				beforeSend: function () {
+				},
+				success: function (response) {
+					$("#id_pago").val(response.resp[0].nuevo_id);
+					actualiza_cuota(id_pago);
+					actualiza_cuota_x(response.resp[0].nuevo_id);
+					cambiar_estado_cuota(id_pago);
+					cerrar_ventana_regularizacion('#modal_regularizacion');
+				}
+			});*@
+		}
+    }
+    function eliminarFila() {
+        var table = document.getElementById("tabla_regularizaciones");
+        var rowCount = table.rows.length;
+        //console.log(rowCount);
+
+        if (rowCount <= 1)
+            alert('No se puede eliminar el encabezado');
+        else
+            table.deleteRow(rowCount - 1);
+    }
+</script>

@@ -1,0 +1,51 @@
+﻿@using IngresoDinero.Helpers
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <title>Ingreso de Dinero</title>
+    @*<link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />*@
+
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="Last-Modified" content="0">
+    <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate" />
+    <meta http-equiv="Pragma" content="no-cache">
+
+    @Scripts.Render("~/bundles/modernizr")
+
+    <link href="~/Content/estilos.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Content/fontawesome/css/all.min.css" />
+    <link rel="stylesheet" href="~/Content/datatables.min.css" />
+    <link rel="stylesheet" href="~/Content/select2.min.css" />
+    <link rel="stylesheet" href="~/Content/select2-bootstrap4.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
+    <link rel="stylesheet" href="@Url.VersionedContent("~/Content/main.css")" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" integrity="sha512-xmGTNt20S0t62wHLmQec2DauG9T+owP9e6VU8GigI0anN7OXLip9i7IwEhelasml2osdxX71XcYm6BQunTQeQg==" crossorigin="anonymous" />
+</head>
+<body>
+    <input type="hidden" id="hdnAmbiente" value="@System.Configuration.ConfigurationManager.AppSettings["Ambiente"].ToString()" />
+    <input type="hidden" id="hdnIdPerfil" />
+    <input type="hidden" id="hdnIdSucursal" />
+    <input type="hidden" id="hdnIdCargo" />
+
+    <div id="wrapper">
+        @RenderBody()
+    </div>
+
+    <script src="~/Scripts/jquery-3.5.1.min.js"></script>
+    <script src="~/Scripts/jquery.rut.min.js"></script>
+    <script src="~/Scripts/jquery.inputmask.min.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
+    <script src="~/Scripts/datatables.min.js"></script>
+    <script src="~/Scripts/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js" integrity="sha512-VvWznBcyBJK71YKEKDMpZ0pCVxjNuKwApp4zLF3ul+CiflQi6aIJR+aZCP/qWsoFBA28avL5T5HA+RE+zrGQYg==" crossorigin="anonymous"></script>
+    @RenderSection("HeaderJS", required: false)
+    @RenderSection("scripts", required: false)
+</body>
+</html>

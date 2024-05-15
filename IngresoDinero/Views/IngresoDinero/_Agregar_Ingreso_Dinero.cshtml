@@ -1,0 +1,1135 @@
+﻿@using IngresoDinero.clases;
+@using IngresoDinero.Models;
+@model IEnumerable<IngresosDinero>
+@{
+    string idPerfil = Request.Cookies["cookiePerfil"]["perfil"].ToString();
+    int id_usu = int.Parse(Request.Cookies["cookiePerfil"]["usuario"].ToString());
+  //  string usuario = "10016";// Request.Cookies["cookiePerfil"]["usuario"].ToString();
+  //  int id_usu = 10008;
+    int id_ingreso = ViewBag.id_ingreso;
+    List<perfilamiento> itemselect = ComisionesModels.Llama_Perfilamiento_Filtros_Default_Front(id_usu, "COMISION_INMOBILIARIA", "PRINCIPAL");
+
+    string[] select_estado_promesa = itemselect[0].g_estado_promesa.Split(',');
+    string[] select_estado_factura = itemselect[0].g_estado_factura.Split(',');
+
+    DateTime fecha = DateTime.Now;
+    string fech_hoy = fecha.ToString("yyyy-MM-dd");
+    string fec_hoy = fecha.ToString("d", new System.Globalization.CultureInfo("es-CL"));
+    
+
+}
+<div class="modal-header bg-color2">
+    <h5 class="modal-title font-weight-bold">Datos Ingreso Dinero</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+
+    @if (id_ingreso == 0)
+    {
+        <input type="hidden" id="id_ing" name="id_ing" value="0" />
+        <input type="hidden" id="ing_proc" name="ing_proc" value="1" />
+
+        <div class="row p-2">
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label for="id_tipo_ingreso" class="col-md-4 col-form-label font-weight-bold color2">Tipo Ingreso</label>
+                    <div class="col-md-8">
+                        <select class="id_tipo_ingreso" id="id_tipo_ingreso" name="id_tipo_ingreso">
+                            <option value="0">Seleccione</option>
+                            @{
+                                var lst1 = MaestrosModel.CargaListaCotizaciones(123);
+                                foreach (var item in lst1.Where(l => l.NValor1 == "1"))
+                                {
+                                    if (idPerfil == "14" && id_usu != 10168 && id_usu != 100388)
+                                    {
+                                        if (item.IdLista == "7" || item.IdLista == "11" || item.IdLista == "8")
+                                        {
+                                            <option value="@item.IdLista">@item.Descripcion</option>
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.IdLista">@item.Descripcion</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="ing_rut_cliente" class="col-md-4 col-form-label font-weight-bold color2">Rut</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control rut" id="ing_rut_cliente" name="ing_rut_cliente" value="" />
+                        <div class="invalid-feedback">Rut Inválido!</div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="ing_nombre_cliente" class="col-md-4 col-form-label font-weight-bold color2">Nombre</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="ing_nombre_cliente" name="ing_nombre_cliente" value="" />
+                        <div class="invalid-feedback">RUT inválido</div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="ing_g_ape_pat" class="col-md-4 col-form-label font-weight-bold color2">Apellido Paterno</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="ing_g_ape_pat" name="ing_g_ape_pat" value="" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="ing_g_ape_mat" class="col-md-4 col-form-label font-weight-bold color2">Apellido Materno</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="ing_g_ape_mat" name="ing_g_ape_mat" value="" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="ing_g_comuna" class="col-md-4 col-form-label font-weight-bold color2">Comuna</label>
+                    <div class="col-md-8">
+                        <select class="ing_g_comuna" id="ing_g_comuna" name="ing_g_comuna">
+                            <option value="0">Seleccione</option>
+                            @{
+                                List<listascombobox> lst3 = ComisionesModels.ListasCombobox(5, null);
+                                foreach (var item2 in lst3)
+                                {
+                                    <option value="@item2.id">@item2.descripcion</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="ing_g_direccion_cli" class="col-md-4 col-form-label font-weight-bold color2">Direccion</label>
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" id="ing_g_direccion_cli" name="ing_g_direccion_cli" value="" />
+                    </div>
+                    <label for="ing_g_direccion_cli_numero" class="col-md-1 col-form-label font-weight-bold color2">Num</label>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" id="ing_g_direccion_cli_numero" name="ing_g_direccion_cli_numero" value="" />
+                    </div>
+                </div>
+
+                <div class="form-group row seccion-ing-email">
+                    <label for="g_cta_cte" class="col-md-4 col-form-label font-weight-bold color2">Email</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="ing_g_email" name="ing_g_email" maxlength="30" value="" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-6">
+
+                <div class="form-group row">
+                    <label for="id_forma_pago" class="col-md-4 col-form-label font-weight-bold color2">Forma Pago</label>
+                    <div class="col-md-8">
+                        <select class="id_forma_pago" id="id_forma_pago" name="id_forma_pago">
+                            <option value="0">Seleccione</option>
+                            @{
+                                List<listascombobox> lst2 = ComisionesModels.ListasCombobox(8, null);
+                                foreach (var item2 in lst2)
+                                {
+                                    if ((idPerfil == "1" || idPerfil == "21" || idPerfil == "2") && id_usu != 10016)
+                                    {
+                                        if (item2.id != 6)
+                                        {
+                                           <option value="@item2.id">@item2.descripcion</option>
+                                        }
+                                    }
+                                    else { 
+                                            <option value="@item2.id">@item2.descripcion</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row seccion-cuotas">
+                    <label for="nCuotas" class="col-md-4 col-form-label font-weight-bold color2">N° Cheques</label>
+                    <div class="col-md-8">
+                        <input type="number" class="form-control" id="nCuotas" name="nCuotas" value="1" min="1" />
+                    </div>
+                </div>
+                <div class="form-group row seccion-banco">
+                    <label for="id_banco" class="col-md-4 col-form-label font-weight-bold color2">Banco</label>
+                    <div class="col-md-8">
+                        <select class="id_banco" id="id_banco" name="id_banco">
+                            <option value="0">Seleccione</option>
+                            @{
+                                List<listascombobox> lstBanco = ComisionesModels.ListasCombobox(25, null);
+                                foreach (var item2 in lstBanco)
+                                {
+                                    <option value="@item2.id">@item2.descripcion</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="id_plaza" class="col-md-4 col-form-label font-weight-bold color2">Plaza</label>
+                    <div class="col-md-8">
+
+                        <select class="inp_pago select_idplaza" id="id_plaza" name="id_plaza">
+                            <option value="0">Seleccione</option>
+                            @{
+                                List<listascombobox> lst8 = ComisionesModels.ListasCombobox2(144, null);
+                                foreach (var item5 in lst8)
+                                {
+                                    <option value="@item5.id">@item5.descripcion</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="id_empresa" class="col-md-4 col-form-label font-weight-bold color2">Empresa</label>
+                    <div class="col-md-8">
+
+                        <select class="inp_pago select_idempresa" id="id_empresa" name="id_empresa">
+                            <option value="0">Seleccione</option>
+                            @{
+                                List<listascombobox> lst9 = ComisionesModels.ListasCombobox(147, null);
+                                foreach (var item5 in lst9)
+                                {
+                                    <option value="@item5.id" >@item5.descripcion</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row seccion-cta-cte">
+                    <label for="g_cta_cte" class="col-md-4 col-form-label font-weight-bold color2">N° Cuenta Corriente</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control g_cta_cte" id="g_cta_cte" name="g_cta_cte" maxlength="30" value="" />
+                    </div>
+                </div>
+
+
+                <div class="form-group row seccion-serie">
+                    <label for="g_serie" class="col-md-4 col-form-label font-weight-bold color2">N° Serie</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control g_serie" id="g_serie" name="g_serie" value="" />
+                    </div>
+                </div>
+                <div class="form-group row seccion-fecha-trf">
+                    <label for="ing_f_fecha_trf" class="col-md-4 col-form-label font-weight-bold color2">Fecha TRF</label>
+                    <div class="col-md-8">
+                        <input type="date" class="form-control ing_f_fecha_trf" id="ing_f_fecha_trf" name="ing_f_fecha_trf" value="" />
+                    </div>
+                </div>
+                <div class="form-group row seccion-vencimiento">
+                    <label for="ing_f_vencimiento" class="col-md-4 col-form-label font-weight-bold color2">Fecha Vencimiento</label>
+                    <div class="col-md-8">
+                        <input type="date" class="form-control ing_f_vencimiento" id="ing_f_vencimiento" name="ing_f_vencimiento" value="" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="ing_monto_uf" class="col-md-4 col-form-label font-weight-bold color2">Monto UF</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control ing_monto_uf" id="ing_monto_uf" name="ing_monto_uf" data-inputmask="'alias': 'numeric', 'allowMinus': false, 'groupSeparator': '.', 'digits': 2, 'digitsOptional': true, 'radixPoint': ',', 'rightAlign': false" value="" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="ing_v_monto" class="col-md-4 col-form-label font-weight-bold color2">Monto $</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control ing_v_monto" id="ing_v_monto" name="ing_v_monto" data-inputmask="'alias': 'numeric', 'allowMinus': false, 'groupSeparator': '.', 'digits': 0, 'radixPoint': ',', 'rightAlign': false" value="" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="ing_g_observacion_ingreso" class="col-md-4 col-form-label font-weight-bold color2">Observaciones:</label>
+                    <div class="col-md-8">
+                        <textarea rows="5" style="width:340px;resize:none" id="ing_g_observacion_ingreso" name="ing_g_observacion_ingreso"></textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="ing_archivo" class="col-md-4 col-form-label font-weight-bold color2">Adjunto</label>
+                    <div class="col-md-8">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="ing_archivo">
+                            <label class="custom-file-label" for="ing_archivo" data-browse="Elegir"><i>Seleccione un archivo</i></label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="seccion-cuotas">
+            <div class="text-center seccion-genera-cuotas">
+                <button type="button" id="btnGenerarCuotas" class="btn btn-color2">Generar Cuotas</button>
+                <table id="tbl_cuotas_generadas" cellpadding="0" cellspacing="0" class="table table-bordered table-hover shadow-sm tbl-sm table-editable mt-4" style="display:none;">
+                    <thead class="thead-corp">
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th>Banco</th>
+                            <th>Cta. Cte.</th>
+                            <th>Serie</th>
+                            <th>F. Vencimiento</th>
+                            <th>Monto UF</th>
+                            <th>Monto $</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" class="text-right"><strong>Total</strong></td>
+                            <td class="text-left"><strong id="txt_total_monto_uf"></strong></td>
+                            <td class="text-left"><strong id="txt_total_monto_peso"></strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            string g_file = "";
+            if (!string.IsNullOrEmpty(item.g_file))
+            {
+                string[] g_file_split = item.g_file.Split('/');
+                g_file = item.g_file.Contains("/") ? g_file_split[g_file_split.Length - 1] : item.g_file;
+            }
+            <input type="hidden" id="id_ing" name="id_ing" value="@item.id_ing" />
+            <input type="hidden" id="ing_proc" name="ing_proc" value="2" />
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <div class="form-group row">
+                        <label for="id_tipo_ingreso" class="col-md-4 col-form-label font-weight-bold color2">Tipo Ingreso</label>
+                        <div class="col-md-8">
+                            <select class="id_tipo_ingreso" id="id_tipo_ingreso" name="id_tipo_ingreso">
+                                <option value="0">Seleccione</option>
+                                @{
+                                    var lst1 = MaestrosModel.CargaListaCotizaciones(123);
+                                    foreach (var item2 in lst1.Where(l => l.NValor1 == "1"))
+                                    {
+                                        @*<option value="@item2.IdLista" @(item.id_tipo.ToString() == item2.IdLista ? "selected" : "")>@item2.Descripcion</option>*@
+
+
+                                        if (idPerfil == "14" && id_usu != 10168 && id_usu != 100388)
+                                        {
+                                            if (item2.IdLista == "7" || item2.IdLista == "11" || item2.IdLista == "8")
+                                            {
+                                                <option value="@item2.IdLista" @(item.id_tipo.ToString() == item2.IdLista ? "selected" : "")>@item2.Descripcion</option>
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option value="@item2.IdLista" @(item.id_tipo.ToString() == item2.IdLista ? "selected" : "")>@item2.Descripcion</option>
+                                        }
+                                    }
+
+
+
+
+
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="ing_rut_cliente" class="col-md-4 col-form-label font-weight-bold color2">Rut</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control rut" id="ing_rut_cliente" name="ing_rut_cliente" value="@item.rut_cliente" />
+                            <div class="invalid-feedback">Rut Inválido!</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="ing_nombre_cliente" class="col-md-4 col-form-label font-weight-bold color2">Nombre</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="ing_nombre_cliente" name="ing_nombre_cliente" value="@item.g_nom" />
+                            <div class="invalid-feedback">RUT inválido</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="ing_g_ape_pat" class="col-md-4 col-form-label font-weight-bold color2">Apellido Paterno</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="ing_g_ape_pat" name="ing_g_ape_pat" value="@item.g_ape_pat" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="ing_g_ape_mat" class="col-md-4 col-form-label font-weight-bold color2">Apellido Materno</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="ing_g_ape_mat" name="ing_g_ape_mat" value="@item.g_ape_mat" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="ing_g_comuna" class="col-md-4 col-form-label font-weight-bold color2">Comuna</label>
+                        <div class="col-md-8">
+
+                            <select class="ing_g_comuna" id="ing_g_comuna" name="ing_g_comuna">
+                                <option value="0">Seleccione</option>
+                                @{
+                                    List<listascombobox> lst3 = ComisionesModels.ListasCombobox(5, null);
+                                    foreach (var item2 in lst3)
+                                    {
+                                        <option value="@item2.id" @(item.g_comuna_cli == item2.descripcion ? "selected" : "")>@item2.descripcion</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="ing_g_direccion_cli" class="col-md-4 col-form-label font-weight-bold color2">Direccion</label>
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" id="ing_g_direccion_cli" name="ing_g_direccion_cli" value="@item.g_direccion_cli" />
+                        </div>
+                        <label for="ing_g_direccion_cli_numero" class="col-md-1 col-form-label font-weight-bold color2">Num</label>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" id="ing_g_direccion_cli_numero" name="ing_g_direccion_cli_numero" value="@item.g_num_casa" />
+                        </div>
+                    </div>
+
+                    @if (item.id_forma_pago == "6")
+                    {
+                        <div class="form-group row">
+                            <label for="ing_email" class="col-md-4 col-form-label font-weight-bold color2">Email</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="ing_email" name="ing_monto_uf" value="@item.g_mail_per" />
+                            </div>
+                        </div>
+                    }
+
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label for="ing_id_estado_ingreso" style="float:right" class="col-md-4 col-form-label font-weight-bold color2">Estado: </label>
+                        <label for="ing_g_estado_ingreso" style="float:right" class="col-md-4 col-form-label font-weight-bold ">@item.g_estado</label>
+                    </div>
+                    <div class="form-group row">
+                        <label for="id_forma_pago" class="col-md-4 col-form-label font-weight-bold color2">Forma Pago</label>
+                        <div class="col-md-8">
+                            <select class="id_forma_pago" id="id_forma_pago" name="id_forma_pago">
+                                <option value="0">Seleccione</option>
+                                @{
+                                    List<listascombobox> lst2 = ComisionesModels.ListasCombobox(8, null);
+                                    foreach (var item2 in lst2)
+                                    {
+                                        <option value="@item2.id" @(item.id_forma_pago == item2.id.ToString() ? "selected" : "")>@item2.descripcion</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row seccion-banco">
+                        <label for="id_banco" class="col-md-4 col-form-label font-weight-bold color2">Banco</label>
+                        <div class="col-md-8">
+                            <select class="id_banco" id="id_banco" name="id_banco">
+                                <option value="0">Seleccione</option>
+                                @{
+                                    List<listascombobox> lstBanco = ComisionesModels.ListasCombobox(25, null);
+                                    foreach (var item2 in lstBanco)
+                                    {
+                                        <option value="@item2.id" @(item.id_banco == item2.id.ToString() ? "selected" : "")>@item2.descripcion</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="id_plaza" class="col-md-4 col-form-label font-weight-bold color2">Plaza</label>
+                        <div class="col-md-8">
+
+                            <select class="inp_pago select_idplaza" id="id_plaza" name="id_plaza">
+                                <option value="0">Seleccione</option>
+                                @{
+                                    List<listascombobox> lst8 = ComisionesModels.ListasCombobox2(144, null);
+                                    foreach (var item5 in lst8)
+                                    {
+                                        <option value="@item5.id" @(item5.id.ToString() == item.id_plaza ? "selected" : "")>@item5.descripcion</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="id_empresa" class="col-md-4 col-form-label font-weight-bold color2">Empresa</label>
+                        <div class="col-md-8">
+
+                            <select class="inp_pago select_idplaza" id="id_empresa" name="id_empresa">
+                                <option value="0">Seleccione</option>
+                                @{
+                                    List<listascombobox> lst9 = ComisionesModels.ListasCombobox(147, null);
+                                    foreach (var item5 in lst9)
+                                    {
+                                        <option value="@item5.id" @(item5.id.ToString() == item.id_empresa ? "selected" : "")>@item5.descripcion</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row seccion-cta-cte">
+                        <label for="g_cta_cte" class="col-md-4 col-form-label font-weight-bold color2">N° Cuenta Corriente</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="g_cta_cte" name="g_cta_cte" maxlength="30" value="@item.g_cta_cte" />
+                        </div>
+                    </div>
+                    <div class="form-group row seccion-serie">
+                        <label for="g_serie" class="col-md-4 col-form-label font-weight-bold color2">N° Serie</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="g_serie" name="g_serie" value="@item.g_serie" />
+                        </div>
+                    </div>
+                    <div class="form-group row seccion-fecha-trf">
+                        <label for="ing_f_fecha_trf" class="col-md-4 col-form-label font-weight-bold color2">Fecha TRF</label>
+                        <div class="col-md-8">
+                            <input type="date" class="form-control" id="ing_f_fecha_trf" name="ing_f_fecha_trf" value="@(string.IsNullOrEmpty(item.f_vencimiento) ? "" : DateTime.Parse(item.f_vencimiento).ToString("yyyy-MM-dd"))" />
+                        </div>
+                    </div>
+                    <div class="form-group row seccion-vencimiento">
+                        <label for="ing_f_vencimiento" class="col-md-4 col-form-label font-weight-bold color2">Fecha Vencimiento</label>
+                        <div class="col-md-8">
+                            <input type="date" class="form-control" id="ing_f_vencimiento" name="ing_f_vencimiento" value="@(string.IsNullOrEmpty(item.f_vencimiento) ? "" : DateTime.Parse(item.f_vencimiento).ToString("yyyy-MM-dd"))" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="ing_monto_uf" class="col-md-4 col-form-label font-weight-bold color2">Monto UF</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="ing_monto_uf" name="ing_monto_uf" data-inputmask="'alias': 'numeric', 'allowMinus': false, 'groupSeparator': '.', 'digits': 2, 'digitsOptional': true, 'radixPoint': ',', 'rightAlign': false" value="@item.v_monto_uf" />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="ing_v_monto" class="col-md-4 col-form-label font-weight-bold color2">Monto $</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="ing_v_monto" name="ing_v_monto" data-inputmask="'alias': 'numeric', 'allowMinus': false, 'groupSeparator': '.', 'digits': 0, 'radixPoint': ',', 'rightAlign': false" value="@item.v_monto" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="ing_g_observacion_ingreso" class="col-md-4 col-form-label font-weight-bold color2">Observaciones:</label>
+                        <div class="col-md-8">
+                            <textarea rows="5" style="width:340px;resize:none" id="ing_g_observacion_ingreso" name="ing_g_observacion_ingreso">@item.g_observacion_ingreso</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="ing_archivo" class="col-md-4 col-form-label font-weight-bold color2">Adjunto</label>
+                        <div class="col-md-8">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="ing_archivo" id_prop="@item.id_ing">
+                                <label class="custom-file-label" for="ing_archivo" data-browse="Elegir">
+                                    @if (string.IsNullOrEmpty(item.g_file))
+                                    {
+                                        <i>Seleccione un archivo</i>
+                                    }
+                                    else
+                                    {
+                                        <i> </i>
+                                        @*@g_file*@
+                                    }
+                                </label>
+                            </div>
+                            @if (!string.IsNullOrEmpty(item.g_file))
+                            {
+                                <div class="small"><a href="@item.g_file" target="_blank">Ver archivo guardado (@g_file)</a></div>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    }
+</div>
+<div class="modal-footer">
+    <div class="text-center w-100">
+        @if (id_ingreso != 0)
+        {
+            <a href="https://sistemas.lecarosgroup.com/ContratosV3/Home/GeneraContrato?id=@id_ingreso&con=7&sp=15" class="btn btn-color2 px-4 mx-3">Recibo Dinero</a>
+        }
+        <button type="button" class="btn btn-color2 px-4 mx-3" id="btn_guardar_ingreso">Guardar</button>
+        <button type="button" class="btn btn-secondary px-4 mx-3" data-dismiss="modal">Cerrar</button>
+    </div>
+</div>
+
+<script>
+
+    $(function () {
+        // Inputmask
+        $(":input[data-inputmask]").inputmask();
+
+        bsCustomFileInput.init();
+
+        $('#nCuotas').on('change', function () {
+            var $generaCuotas = $('.seccion-genera-cuotas');
+            var nCuotas = parseInt($('#nCuotas').val());
+
+            if (nCuotas > 1) {
+                $generaCuotas.show();
+            } else {
+                $generaCuotas.hide();
+            }
+        });
+
+        function cambioFormaPago() {
+
+            var id_forma_pago = parseInt($('#id_forma_pago').val());
+            var $cuotas = $('.seccion-cuotas');
+            var $generaCuotas = $('.seccion-genera-cuotas');
+            var $banco = $('.seccion-banco');
+            var $ctaCte = $('.seccion-cta-cte');
+            var $serie = $('.seccion-serie');
+            var $fechaTrf = $('.seccion-fecha-trf');
+            var $vencimiento = $('.seccion-vencimiento');
+            var $email = $('.seccion-ing-email');
+
+            var nCuotas = parseInt($('#nCuotas').val());
+
+            //var ing_f_fecha_trf = $('#ing_f_fecha_trf').val();
+
+            switch (id_forma_pago) {
+                case 1: //Efectivo (obligar relleno observaciones)
+                    $cuotas.hide();
+                    $banco.hide();
+                    $ctaCte.hide();
+                    $serie.hide();
+                    $fechaTrf.hide();
+                    $vencimiento.hide();
+                    $email.hide();
+                    break;
+                case 2: //Cheque
+                    $cuotas.show();
+                    if (nCuotas > 1) {
+                        $generaCuotas.show();
+                    } else {
+                        $generaCuotas.hide();
+                    }
+                    $banco.show();
+                    $ctaCte.show();
+                    $serie.show();
+                    $fechaTrf.hide();
+                    $vencimiento.show();
+                    $email.hide();
+                    break;
+                case 3: //Transferencia
+                    $cuotas.hide();
+                    $banco.show();
+                    $ctaCte.hide();
+                    $serie.hide();
+                    $fechaTrf.show();
+                    $vencimiento.hide();
+                    $email.hide();
+                    break;
+                case 4: //Tarjeta de Crédito
+                    $cuotas.hide();
+                    $banco.hide();
+                    $ctaCte.hide();
+                    $serie.hide();
+                    $fechaTrf.show();
+                    $vencimiento.hide();
+                    $email.hide();
+                    break;
+                case 5: //Tarjeta de Débito
+                    $cuotas.hide();
+                    $banco.show();
+                    $ctaCte.hide();
+                    $serie.hide();
+                    $fechaTrf.show();
+                    $vencimiento.hide();
+                    $email.hide();
+                    break;
+                case 6: //SERVIPAG
+                    $cuotas.hide();
+                    $banco.hide();
+                    $ctaCte.hide();
+                    $serie.hide();
+                    $fechaTrf.hide();
+                    $vencimiento.show();
+                    $email.show();
+
+                    $('#ing_f_vencimiento').val("@fech_hoy");
+                    break;
+                case 7: //Garantía
+                    $cuotas.hide();
+                    $banco.hide();
+                    $ctaCte.hide();
+                    $serie.hide();
+                    $fechaTrf.hide();
+                    $vencimiento.hide();
+                    $email.hide();
+                    break;
+                default:
+                    $cuotas.hide();
+                    $banco.hide();
+                    $ctaCte.hide();
+                    $serie.hide();
+                    $fechaTrf.hide();
+                    $vencimiento.hide();
+                    $email.hide();
+                    break;
+            }
+        }
+
+        cambioFormaPago();
+
+        $('#id_forma_pago').on('change', function () {
+            cambioFormaPago();
+        });
+
+        $("#modalDatosPry input.rut").rut({
+            useThousandsSeparator: true,
+            validateOn: 'change',
+        }).on('rutInvalido', function (e) {
+            var $input = $(this);
+            if ($input.val().length > 0 || $input.prop('required')) {
+                $input.addClass('is-invalid');
+                $input.next('.invalid-feedback').show();
+                $input.focus();
+            } else {
+                $input.removeClass('is-invalid');
+                $input.next('.invalid-feedback').hide();
+            }
+        }).on('rutValido', function (e, rut, dv) {
+            var $input = $(this);
+            $input.removeClass('is-invalid');
+            $input.next('.invalid-feedback').hide();
+
+            var ing_rut_cliente = $input.val();
+            ing_rut_cliente = ing_rut_cliente.split('.').join('');
+            var rutSplit = ing_rut_cliente.split('-');
+            var rut = rutSplit[0];
+
+            var param = {
+                ing_rut_cliente: rut
+            };
+
+            $.ajax({
+                data: param,
+                url: "@Url.Action("Carga_Datos_Cliente", "IngresoDinero")",
+                type: "get",
+                beforeSend: function () {
+                    /*$this.prop('disabled', true);*/
+                },
+                success: function (res) {
+                    if (res.resp[0] != null) {
+                        $('#ing_nombre_cliente').val(res.resp[0].g_nom);
+                        $('#ing_g_ape_pat').val(res.resp[0].g_ape_pat);
+                        $('#ing_g_ape_mat').val(res.resp[0].g_ape_mat);
+                        $('#ing_g_direccion_cli').val(res.resp[0].g_direccion_cli);
+                        $('#ing_g_direccion_cli_numero').val(res.resp[0].g_num_casa);
+                        $('#ing_g_comuna').val(res.resp[0].id_dom_com);
+                        $('#ing_g_email').val(res.resp[0].g_mail_per);
+                    }
+                },
+                error: function () {
+                    //$this.prop('disabled', false);
+                    //alert('Error al guardar!');
+                }
+            });
+        });
+
+        function subirArchivoIngreso(id_ing) {
+            return new Promise((resolve, reject) => {
+                var files = $('#ing_archivo').get(0).files;
+
+                if (files.length == 0) {
+                    resolve();
+                    return;
+                }
+
+                var fd = new FormData();
+                fd.append('id_ing', id_ing);
+                fd.append('file', files[0]);
+
+                var subir = $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("Subir_Archivo_Ingreso", "IngresoDinero")",
+                    contentType: false,
+                    processData: false,
+                    data: fd
+                });
+
+                subir.done(function (res) {
+                    if (res.estado) {
+                        resolve();
+                    } else {
+                        alert(res.mensaje);
+                        reject();
+                    }
+                });
+
+                subir.fail(function () {
+                    reject();
+                });
+            });
+        }
+
+        function guardarIngreso(param) {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    data: JSON.stringify(param),
+                    contentType: 'application/json; charset=UTF-8',
+                    url: "@Url.Action("Ingreso_Guardar_Ingreso", "IngresoDinero")",
+                    type: "POST",
+                    success: function (res) {
+                        if (res.estado) {
+                            resolve(res.id_ing);
+                        } else {
+                            alert(res.mensaje);
+                            reject();
+                        }
+                    },
+                    error: function () {
+                        reject();
+                    }
+                });
+            });
+        }
+
+        $('#btn_guardar_ingreso').on('click', async function () {
+
+            var proc = $('#ing_proc').val();
+            var id_ing = $('#id_ing').val();
+            var id_tipo = $('#id_tipo_ingreso').val();
+            var ing_rut_cliente = $('#ing_rut_cliente').val();
+            var ing_nombre_cliente = $('#ing_nombre_cliente').val().trim();
+            var ing_g_ape_pat = $('#ing_g_ape_pat').val().trim();
+            var ing_g_ape_mat = $('#ing_g_ape_mat').val().trim();
+            var id_forma_pago = $('#id_forma_pago').val();
+            var id_banco = $('#id_banco').val().trim();
+            var g_cta_cte = $('#g_cta_cte').val().trim();
+            var g_serie = $('#g_serie').val().trim();
+            var ing_monto_uf = $('#ing_monto_uf').inputmask('unmaskedvalue');
+            var ing_v_monto = $('#ing_v_monto').inputmask('unmaskedvalue');
+            var ing_f_fecha_trf = $('#ing_f_fecha_trf').val();
+            var ing_id_plaza = $('#id_plaza').val();
+            var ing_id_empresa = $('#id_empresa').val();
+
+            var ing_g_direccion_cli = $('#ing_g_direccion_cli').val().trim();
+            var ing_g_direccion_cli_numero = $('#ing_g_direccion_cli_numero').val().trim();
+            var ing_f_vencimiento = $('#ing_f_vencimiento').val();
+            var ing_g_observacion_ingreso = $('#ing_g_observacion_ingreso').val().trim();
+
+            var id_comuna = $('#ing_g_comuna').val();
+
+            var nCuotas = parseInt($('#nCuotas').val());
+
+            if (id_tipo == 0) {
+                $('#id_tipo_ingreso').focus();
+                return;
+            }
+
+            if (ing_rut_cliente.length == 0 || !$.validateRut(ing_rut_cliente)) {
+                $('#ing_rut_cliente').focus();
+                return;
+            }
+
+            if (ing_nombre_cliente.length == 0) {
+                $('#ing_nombre_cliente').focus();
+                return;
+            }
+
+            if (ing_g_ape_pat.length == 0) {
+                $('#ing_g_ape_pat').focus();
+                return;
+            }
+
+            if (ing_g_ape_mat.length == 0) {
+                $('#ing_g_ape_mat').focus();
+                return;
+            }
+
+            if (ing_g_observacion_ingreso.length == 0) {
+                alert('El campo de Observaciones es obligatorio.');
+                $('#ing_g_observacion_ingreso').focus();
+                return;
+            }
+            if (ing_monto_uf.length == 0 && ing_v_monto.length == 0) {
+                alert('Debe Ingresar Minimo un Monto UF o $')
+                return;
+            }
+
+            ing_rut_cliente = ing_rut_cliente.split('.').join('');
+            var rutSplit = ing_rut_cliente.split('-');
+            var rut = rutSplit[0];
+            var g_dv = rutSplit[1];
+
+            var param = {
+                proc: proc,
+                id_ing: id_ing,
+                id_tipo: id_tipo,
+                ing_rut_cliente: rut,
+                g_dv: g_dv,
+                ing_nombre_cliente: ing_nombre_cliente,
+                ing_g_ape_pat: ing_g_ape_pat,
+                ing_g_ape_mat: ing_g_ape_mat,
+                id_banco: id_banco,
+                g_cta_cte: g_cta_cte,
+                g_serie: g_serie,
+                ing_monto_uf: ing_monto_uf,
+                ing_v_monto: ing_v_monto,
+                ing_f_fecha_cambio_estado: ing_f_fecha_trf,
+                ing_g_direccion_cli: ing_g_direccion_cli,
+                ing_f_vencimiento: ing_f_vencimiento,
+                ing_g_observacion_ingreso: ing_g_observacion_ingreso,
+                ing_g_direccion_cli_numero: ing_g_direccion_cli_numero,
+                id_forma_pago: id_forma_pago,
+                id_comuna: id_comuna,
+                id_plaza: ing_id_plaza,
+                id_empresa: ing_id_empresa
+            };
+
+            try {
+                var ingresoMultiple = (id_forma_pago == 2 && nCuotas > 1);
+
+                if (ingresoMultiple) {
+                    $tbl_cuotas_generadas = $('#tbl_cuotas_generadas');
+
+                    if (!$tbl_cuotas_generadas.has('tbody tr')) {
+                        alert('Debe generar las cuotas.');
+                        return;
+                    }
+
+                    if (!confirm('Se registrará varios cheques generados e ingresados. ¿Deseas continuar?'))
+                        return;
+
+                    for (var tr of $tbl_cuotas_generadas.find('tbody tr')) {
+                        var $tr = $(tr);
+                        g_cta_cte = $tr.find('.g_cta_cte').val().trim();
+                        g_serie = $tr.find('.g_serie').val().trim();
+                        ing_f_vencimiento = $tr.find('.ing_f_vencimiento').val();
+                        ing_monto_uf = $tr.find('.ing_monto_uf').inputmask('unmaskedvalue');
+                        ing_v_monto = $tr.find('.ing_v_monto').inputmask('unmaskedvalue');
+
+                        var param = {
+                            proc: proc,
+                            id_ing: id_ing,
+                            id_tipo: id_tipo,
+                            ing_rut_cliente: rut,
+                            g_dv: g_dv,
+                            ing_nombre_cliente: ing_nombre_cliente,
+                            ing_g_ape_pat: ing_g_ape_pat,
+                            ing_g_ape_mat: ing_g_ape_mat,
+                            id_banco: id_banco,
+                            g_cta_cte: g_cta_cte,
+                            g_serie: g_serie,
+                            ing_monto_uf: ing_monto_uf,
+                            ing_v_monto: ing_v_monto,
+                            ing_f_fecha_cambio_estado: ing_f_fecha_trf,
+                            ing_g_direccion_cli: ing_g_direccion_cli,
+                            ing_f_vencimiento: ing_f_vencimiento,
+                            ing_g_observacion_ingreso: ing_g_observacion_ingreso,
+                            ing_g_direccion_cli_numero: ing_g_direccion_cli_numero,
+                            id_forma_pago: id_forma_pago,
+                            id_comuna: id_comuna,
+                            id_plaza: ing_id_plaza,
+                            id_empresa:ing_id_empresa
+                        };
+
+                        var new_id_ing = await guardarIngreso(param);
+                        await subirArchivoIngreso(new_id_ing);
+                    }
+                } else {
+                    id_ing = await guardarIngreso(param);
+                    await subirArchivoIngreso(id_ing);
+                }
+
+                alert('Guardado!');
+                $('#btnBuscar').click();
+                $('#modalDatosPry').modal('hide');
+            } catch (e) {
+                $('#btnBuscar').click();
+                alert('Error al guardar!');
+            }
+
+        });
+
+        $('#btnGenerarCuotas').on('click', function () {
+            var id_banco = $('#id_banco').val();
+            var g_cta_cte = $('#g_cta_cte').val();
+            var g_serie = $('#g_serie').val();
+            var ing_f_vencimiento = $('#ing_f_vencimiento').val();
+            var ing_monto_uf = $('#ing_monto_uf').val();
+            var ing_v_monto = $('#ing_v_monto').val();
+
+            var $id_banco = $('#id_banco').clone();
+            var $g_cta_cte = $('#g_cta_cte').clone().removeClass('form-control');
+            var $g_serie = $('#g_serie').clone().removeClass('form-control');
+            var $ing_monto_uf = $('#ing_monto_uf').clone().removeClass('form-control');
+            var $ing_v_monto = $('#ing_v_monto').clone().removeClass('form-control');
+            var $ing_f_vencimiento = $('#ing_f_vencimiento').clone().removeClass('form-control');
+
+            var nCuotas = parseInt($('#nCuotas').val());
+
+            var duplicarHtml = '<i class="fas fa-angle-double-down p-2 color2 duplicar" role="button" title="Duplicar hacia abajo"></i>';
+
+            $('#tbl_cuotas_generadas').show();
+            $('#tbl_cuotas_generadas tbody').empty();
+
+            for (var i = 0; i < nCuotas; i++) {
+
+                var $tr = $('<tr></tr>');
+
+                if (i == nCuotas - 1)
+                    duplicarHtml = '';
+
+                // Índice
+                $tr.append(`<td class="td-text">${i+1}</td>`);
+
+                // Banco
+                $id_banco.attr('id', 'id_banco' + (i+1)).attr('name', 'id_banco' + (i+1));
+                $tr.append(
+                    $('<td></td>').css('text-align', 'left')
+                                  .append($id_banco.clone().attr('style', 'width: calc(100% - 1.5rem) !important').val(id_banco))
+                                  .append(duplicarHtml)
+                );
+
+                // N° Cuenta Corriente
+                $g_cta_cte.attr('id', 'g_cta_cte' + (i+1)).attr('name', 'g_cta_cte' + (i+1));
+                $tr.append(
+                    $('<td></td>').css('text-align', 'left')
+                                  .append($g_cta_cte.clone().attr('style', 'width: calc(100% - 1.5rem) !important').val(g_cta_cte))
+                                  .append(duplicarHtml)
+                );
+
+                // N° Serie
+                $g_serie.attr('id', 'g_serie' + (i+1)).attr('name', 'g_serie' + (i+1));
+                var serie = isNaN(parseInt(g_serie)) ? g_serie : parseInt(g_serie) + i;
+                $tr.append(
+                    $('<td></td>').css('text-align', 'left')
+                                  .append($g_serie.clone().attr('style', 'width: calc(100% - 1.5rem) !important').val(serie))
+                                  .append(duplicarHtml)
+                );
+
+                // Fecha Vencimiento
+                $ing_f_vencimiento.attr('id', 'ing_f_vencimiento' + (i+1)).attr('name', 'ing_f_vencimiento' + (i+1));
+                var f_vencimiento = ing_f_vencimiento;
+                if (i > 0 && moment(ing_f_vencimiento).isValid()) {
+                    var m_f_vencimiento = moment(ing_f_vencimiento).add(i, 'months');
+                    if (moment(ing_f_vencimiento).date() == moment(ing_f_vencimiento).daysInMonth()) {
+                        m_f_vencimiento.date(m_f_vencimiento.daysInMonth());
+                    }
+                    f_vencimiento = m_f_vencimiento.format('YYYY-MM-DD');
+                }
+                $tr.append(
+                    $('<td></td>').css('text-align', 'left')
+                                  .append($ing_f_vencimiento.clone().attr('style', 'width: calc(100% - 1.5rem) !important').val(f_vencimiento))
+                                  .append(duplicarHtml)
+                );
+
+                // Monto UF
+                $ing_monto_uf.attr('id', 'ing_monto_uf' + (i+1)).attr('name', 'ing_monto_uf' + (i+1));
+                $tr.append(
+                    $('<td></td>').css('text-align', 'left')
+                                  .append($ing_monto_uf.clone().attr('style', 'width: calc(100% - 1.5rem) !important').val(ing_monto_uf))
+                                  .append(duplicarHtml)
+                );
+
+                // Monto $
+                $ing_v_monto.attr('id', 'ing_v_monto' + (i+1)).attr('name', 'ing_v_monto' + (i+1));
+                $tr.append(
+                    $('<td></td>').css('text-align', 'left')
+                                  .append($ing_v_monto.clone().attr('style', 'width: calc(100% - 1.5rem) !important').val(ing_v_monto))
+                                  .append(duplicarHtml)
+                );
+
+                $('#tbl_cuotas_generadas tbody').append($tr);
+            }
+            
+            // Inputmask
+            $("#tbl_cuotas_generadas :input[data-inputmask]").inputmask();
+
+            calcularTotalCuotas();
+        });
+
+        function calcularTotalCuotas() {
+            var total_monto_uf = 0;
+            var total_monto_peso = 0;
+            $('#tbl_cuotas_generadas tbody tr').each(function(){
+                var $tr = $(this);
+                var ing_monto_uf = ($tr.find('.ing_monto_uf').inputmask('unmaskedvalue').replace(',', '.') * 1) || 0;
+                var ing_v_monto = ($tr.find('.ing_v_monto').inputmask('unmaskedvalue').replace(',', '.') * 1) || 0;
+                total_monto_uf += ing_monto_uf;
+                total_monto_peso += ing_v_monto;
+            });
+
+            var decimalFormat = new Intl.NumberFormat('es-CL', { style: 'decimal', minimumFractionDigits: 2 });
+            var clpFormat = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' });
+            $("#txt_total_monto_uf").html(decimalFormat.format(total_monto_uf) + ' UF');
+            $("#txt_total_monto_peso").html(clpFormat.format(total_monto_peso));
+        }
+
+        $('#tbl_cuotas_generadas').on('change', 'input', function() {
+            if ($(this).is('.ing_monto_uf, .ing_v_monto')) {
+                calcularTotalCuotas();
+            }
+        });
+
+        $('#tbl_cuotas_generadas').on('click', '.duplicar', function() {
+            var $td = $(this).closest('td');
+            var $inputSelect = $td.find('input,select');
+
+            if ($inputSelect.length == 0)
+                return;
+
+            var $tr = $(this).closest('tr');
+
+            var i = 0;
+            
+            while ($tr.length > 0) {
+                // Banco
+                if ($inputSelect.is('.id_banco')) {
+                    $tr.find('.id_banco').val($inputSelect.val());
+                }
+
+                // N° Cuenta Corriente
+                if ($inputSelect.is('.g_cta_cte')) {
+                    $tr.find('.g_cta_cte').val($inputSelect.val());
+                }
+
+                // N° Serie
+                if ($inputSelect.is('.g_serie')) {
+                    var g_serie = $inputSelect.val();
+                    var serie = isNaN(parseInt(g_serie)) ? g_serie : parseInt(g_serie) + i;
+                    $tr.find('.g_serie').val(serie);
+                }
+
+                // Fecha Vencimiento
+                if ($inputSelect.is('.ing_f_vencimiento')) {
+                    var ing_f_vencimiento = $inputSelect.val();
+                    var f_vencimiento = ing_f_vencimiento;
+                    if (i > 0 && moment(ing_f_vencimiento).isValid()) {
+                        var m_f_vencimiento = moment(ing_f_vencimiento).add(i, 'months');
+                        if (moment(ing_f_vencimiento).date() == moment(ing_f_vencimiento).daysInMonth()) {
+                            m_f_vencimiento.date(m_f_vencimiento.daysInMonth());
+                        }
+                        f_vencimiento = m_f_vencimiento.format('YYYY-MM-DD');
+                    }
+                    $tr.find('.ing_f_vencimiento').val(f_vencimiento);
+                }
+
+                // Monto UF
+                if ($inputSelect.is('.ing_monto_uf')) {
+                    $tr.find('.ing_monto_uf').val($inputSelect.val());
+                }
+                
+                // Monto $
+                if ($inputSelect.is('.ing_v_monto')) {
+                    $tr.find('.ing_v_monto').val($inputSelect.val());
+                }
+
+                // A la fila siguiente
+                $tr = $tr.next();
+                i++;
+            }
+
+            if ($inputSelect.is('.ing_monto_uf, .ing_v_monto')) {
+                calcularTotalCuotas();
+            }
+        });
+    });
+
+    //$("div").focusout(function () {
+    //    $(this).css("background-color", "#FFFFFF");
+    //});
+</script>

@@ -1,0 +1,625 @@
+/* ==========================================================================
+  1. FONTS
+========================================================================== */
+@font-face {
+    font-family: 'Ubuntu-Light';
+    src: local('?'), url('../fonts/Ubuntu-Light.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* ==========================================================================
+  2. GENERAL
+========================================================================== */
+body {
+    font-family: 'Ubuntu-Light', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    color: #666;
+}
+
+hr {
+    width: 90px;
+    border: 2px solid #FF7219;
+}
+
+.color1 {
+    color: #22A2D9;
+}
+
+.bg-color1 {
+    background-color: #22A2D9 !important;
+}
+
+a.color1:hover {
+    color: #1C88B6;
+}
+
+.color2 {
+    color: #FF7219;
+}
+
+.bg-color2 {
+    background-color: #FF7219 !important;
+}
+
+a.color2:hover {
+    color: #F05C00;
+}
+
+.badge-color1 {
+    color: #fff;
+    background-color: #22A2D9;
+}
+
+.badge-color2 {
+    color: #fff;
+    background-color: #FF7219;
+}
+
+.tooltip .tooltip-inner {
+    background-color: #FF7219;
+}
+
+.tooltip .arrow::before {
+    border-top-color: #FF7219 !important;
+}
+
+/* ==========================================================================
+  3. BOTONES
+========================================================================== */
+.btn {
+    font-weight: bold;
+}
+
+.btn-icon {
+    text-align: center;
+    line-height: 2rem;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem;
+    color: #fff;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+}
+
+.btn-color1 {
+    color: #fff;
+    background-color: #22A2D9;
+    border-color: #22A2D9;
+}
+
+    .btn-color1:hover {
+        color: #fff;
+        background-color: #1C88B6;
+        border-color: #1C88B6;
+    }
+
+    .btn-color1.focus,
+    .btn-color1:focus {
+        box-shadow: 0 0 0 0.2rem rgba(34,162,217,.25);
+    }
+
+    .btn-color1.disabled,
+    .btn-color1:disabled {
+        color: #fff;
+        background-color: #6CC3E8;
+        border-color: #6CC3E8;
+    }
+
+.btn-color2 {
+    color: #fff;
+    background-color: #FF7219;
+    border-color: #FF7219;
+}
+
+    .btn-color2:hover {
+        color: #fff;
+        background-color: #F05C00;
+        border-color: #F05C00;
+    }
+
+    .btn-color2.focus,
+    .btn-color2:focus {
+        box-shadow: 0 0 0 0.2rem rgba(255,114,25,.25);
+    }
+
+    .btn-color2.disabled,
+    .btn-color2:disabled {
+        color: #fff;
+        background-color: #FFA973;
+        border-color: #FFA973;
+    }
+
+.btn-color3 {
+    color: #fff;
+    background-color: #44a92b;
+    border-color: #44a92b;
+}
+
+    .btn-color3:hover {
+        color: #fff;
+        background-color: #378923;
+        border-color: #378923;
+    }
+
+    .btn-color3.focus,
+    .btn-color3:focus {
+        box-shadow: 0 0 0 0.2rem rgba(68,169,43,.25);
+    }
+
+    .btn-color3.disabled,
+    .btn-color3:disabled {
+        color: #fff;
+        background-color: #72D559;
+        border-color: #72D559;
+    }
+
+/* ==========================================================================
+  4. TABLAS
+========================================================================== */
+.table thead td, .table thead th,
+.table tfoot td, .table tfoot th {
+    border-top: 0;
+}
+
+table.dataTable thead th,
+table.dataTable thead td {
+    padding: 10px 18px;
+    border-bottom: 2px solid #FF7219;
+}
+
+table.dataTable tfoot th,
+table.dataTable tfoot td {
+    padding: 10px 18px 6px 18px;
+    border-top: 2px solid #FF7219;
+    font-weight: bold;
+}
+
+table .thead-corp th,
+table .thead-corp td {
+    color: #FF7219;
+    background-color: #fff;
+    border-top-color: #FF7219;
+    border-bottom-color: #FF7219;
+}
+
+table.dataTable.no-footer {
+    border-bottom: 0;
+}
+
+
+.tbl-sm {
+    font-size: 80%;
+}
+
+    .tbl-sm input {
+        font-size: 100%;
+    }
+
+.table-editable > tbody td:not(.td-text) {
+    padding: 0 !important;
+    vertical-align: middle !important;
+}
+
+.table-editable > tbody td.td-text {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.table-editable > tbody td input[type='text'],
+.table-editable > tbody td input[type='date'],
+.table-editable > tbody td select {
+    border: 0;
+    border-radius: 0;
+    margin: 0;
+    padding: 5px 10px;
+    width: 100% !important;
+    background: white;
+}
+
+.table-editable > tbody td input[readonly] {
+    background: transparent;
+}
+
+/* Paginación */
+.pagination {
+    font-weight: bold;
+}
+
+.page-item.previous .page-link {
+    border-radius: 0.5rem 0 0 0.5rem !important;
+}
+
+.page-item.next .page-link {
+    border-radius: 0 0.5rem 0.5rem 0 !important;
+}
+
+.page-item .page-link {
+    background-color: transparent !important;
+    border-color: #FF7219 !important;
+    color: #FF7219 !important;
+    /* border-radius: 0.5rem !important; */
+}
+
+    .page-item .page-link:hover {
+        background-color: #FF7219 !important;
+        border-color: #FF7219 !important;
+        color: #fff !important;
+    }
+
+    .page-item .page-link.focus,
+    .page-item .page-link:focus {
+        box-shadow: 0 0 0 0.2rem rgba(255,114,25,.25);
+    }
+
+.page-item.disabled .page-link {
+    background-color: transparent !important;
+    border-color: #FFA973 !important;
+    color: #FFA973 !important;
+}
+
+.page-item.active .page-link {
+    background-color: #F05C00 !important;
+    border-color: #F05C00 !important;
+    color: #fff !important;
+}
+
+/* ==========================================================================
+  5. FORMULARIOS
+========================================================================== */
+.custom-control label:not(.custom-control-label) {
+    display: block;
+    margin: 0;
+    margin-right: -0.5rem;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    color: #fff;
+    border-color: #22A2D9;
+    background-color: #22A2D9;
+}
+
+.custom-control-input:focus ~ .custom-control-label::before {
+    box-shadow: 0 0 0 0.2rem rgba(34, 162, 217, 0.25);
+}
+
+.custom-control-input:focus:not(:checked) ~ .custom-control-label::before {
+    border-color: #8DD0ED;
+}
+
+.custom-control-input:not(:disabled):active ~ .custom-control-label::before {
+    color: #fff;
+    background-color: #BAE3F4;
+    border-color: #BAE3F4;
+}
+
+.custom-checkbox .custom-control-input:indeterminate ~ .custom-control-label::before {
+    border-color: #22A2D9;
+    background-color: #22A2D9;
+}
+
+.custom-checkbox .custom-control-input:disabled:checked ~ .custom-control-label::before {
+    background-color: rgba(34, 162, 217, 0.5);
+}
+
+.custom-checkbox .custom-control-input:disabled:indeterminate ~ .custom-control-label::before {
+    background-color: rgba(34, 162, 217, 0.5);
+}
+
+.custom-radio .custom-control-input:disabled:checked ~ .custom-control-label::before {
+    background-color: rgba(34, 162, 217, 0.5);
+}
+
+.custom-control-input.color2:checked ~ .custom-control-label::before {
+    color: #fff;
+    border-color: #FF7219;
+    background-color: #FF7219;
+}
+
+.custom-control-input.color2:focus ~ .custom-control-label::before {
+    box-shadow: 0 0 0 0.2rem rgba(255,114,25, 0.25);
+}
+
+.custom-control-input.color2:focus:not(:checked) ~ .custom-control-label::before {
+    border-color: #FFA771;
+}
+
+.custom-control-input.color2:not(:disabled):active ~ .custom-control-label::before {
+    color: #fff;
+    background-color: #FFC7A5;
+    border-color: #FFC7A5;
+}
+
+.custom-checkbox .custom-control-input.color2:indeterminate ~ .custom-control-label::before {
+    border-color: #FF7219;
+    background-color: #FF7219;
+}
+
+.custom-checkbox .custom-control-input.color2:disabled:checked ~ .custom-control-label::before {
+    background-color: rgba(255,114,25, 0.5);
+}
+
+.custom-checkbox .custom-control-input.color2:disabled:indeterminate ~ .custom-control-label::before {
+    background-color: rgba(255,114,25, 0.5);
+}
+
+.custom-radio .custom-control-input.color2:disabled:checked ~ .custom-control-label::before {
+    background-color: rgba(255,114,25, 0.5);
+}
+
+.select2-container--bootstrap4 .select2-results__option--highlighted, .select2-container--bootstrap4 .select2-results__option--highlighted.select2-results__option[aria-selected=true] {
+    background-color: #22A2D9;
+}
+
+/* SWITCH */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 1.75em;
+    height: 1em;
+    margin: 0;
+}
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: 200ms;
+    transition: 200ms;
+}
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 0.8em;
+        width: 0.8em;
+        left: .1em;
+        bottom: .1em;
+        background-color: white;
+        -webkit-transition: 200ms;
+        transition: 200ms;
+    }
+
+input:checked + .slider {
+    background-color: #22A2D9;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 0 0.2rem rgba(34, 162, 217, 0.25);
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(.75em);
+    -ms-transform: translateX(.75em);
+    transform: translateX(.75em);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: .5em;
+}
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+input:checked + .slider.color2 {
+    background-color: #FF7219;
+}
+
+input:focus + .slider.color2 {
+    box-shadow: 0 0 0 0.2rem rgba(255,114,25, 0.25);
+}
+
+/* ==========================================================================
+  6. CONTENEDORES
+========================================================================== */
+.square-box {
+    height: 0;
+    overflow: hidden;
+    padding-top: 100%;
+    position: relative;
+}
+
+.square-box-inside {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.flexbox-centering {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ==========================================================================
+  7. NAVS
+========================================================================== */
+.nav-pills .nav-link.active.color1,
+.nav-pills .show > .nav-link.color1 {
+    color: #fff;
+    background-color: #22A2D9;
+}
+
+.nav-pills .nav-link.active.color2,
+.nav-pills .show > .nav-link.color2 {
+    color: #fff;
+    background-color: #FF7219;
+}
+
+/* ==========================================================================
+  8. TABS
+========================================================================== */
+.tab-content {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+.nav-tabs .nav-link {
+    color: #999;
+    font-weight: bold;
+}
+
+    .nav-tabs .nav-link:hover {
+        color: #666;
+    }
+
+    .nav-tabs .nav-link.active {
+        color: #22A2D9;
+    }
+
+.nav-tabs.nav-color2 .nav-link.active {
+    color: #FF7219;
+}
+
+/* ==========================================================================
+  9. MODALS
+========================================================================== */
+.modal-header {
+    background-color: #22A2D9;
+    color: #fff;
+}
+
+    .modal-header .close {
+        color: #fff;
+        text-shadow: none;
+    }
+
+        .modal-header .close:hover {
+            color: #fff;
+        }
+
+/* ==========================================================================
+  10. LISTAS
+========================================================================== */
+ol.bullet {
+    padding-left: 0;
+    list-style: none;
+    counter-reset: ol-counter;
+}
+
+    ol.bullet > li {
+        counter-increment: ol-counter;
+        margin: 0.25rem;
+        padding-left: 2.5rem !important;
+        margin-bottom: 1rem;
+    }
+
+        ol.bullet > li > .content {
+            margin-top: 0.5rem;
+            margin-left: -2.5rem;
+        }
+
+@media only screen and (min-width: 768px) {
+    ol.bullet > li > .content {
+        margin-left: 0;
+        margin-right: 2.5rem;
+    }
+}
+
+ol.bullet > li::before {
+    content: counter(ol-counter);
+    font-weight: bold;
+    background: #22A2D9;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: inline-block;
+    line-height: 2rem;
+    color: white;
+    text-align: center;
+    margin-right: 0.5rem;
+    margin-left: -2.5em;
+}
+
+ol.bullet ol.bullet > li::before {
+    background: #FF7219;
+}
+
+ol.bullet ol.bullet ol.bullet > li::before {
+    background: #22A2D9;
+}
+
+/* ==========================================================================
+  SCROLL
+========================================================================== */
+.scrollbar::-webkit-scrollbar-track {
+    /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
+    border-radius: 10px;
+    background-color: #e6e8e8;
+}
+
+.scrollbar::-webkit-scrollbar {
+    width: 12px;
+    background-color: transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.1);*/
+    border-radius: 10px;
+    background-color: #FF7219;
+}
+
+    .scrollbar::-webkit-scrollbar-thumb:hover {
+        background-color: #F05C00;
+    }
+
+/* ==========================================================================
+  RESPONSIVE
+========================================================================== */
+.header {
+    position: relative;
+}
+
+@media only screen and (min-width: 992px) {
+    .header-left {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .header-right {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+}
+
+@media (min-width: 992px) {
+    .modal-xxl {
+        max-width: 800px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .modal-xxl {
+        max-width: 1140px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .modal-xxl {
+        max-width: 1540px;
+    }
+}
+
+.fancybox-slide--iframe .fancybox-content {
+    height: 95% !important;
+}

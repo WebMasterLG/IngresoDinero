@@ -1,0 +1,5 @@
+﻿@model IEnumerable<IngresoDinero.clases.listascombobox>
+@foreach (var item in Model)
+{
+    <option value="@item.id">@item.descripcion</option>
+}

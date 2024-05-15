@@ -1,0 +1,195 @@
+﻿@using IngresoDinero.clases;
+@using IngresoDinero.Models;
+@model IEnumerable<Datos_Proyecto>
+    @{
+    //string idPerfil = Request.Cookies["cookiePerfil"]["perfil"].ToString();
+    string usuario = "10016";// Request.Cookies["cookiePerfil"]["usuario"].ToString();
+    }
+    <div class="modal-header bg-color2">
+        <h5 class="modal-title font-weight-bold">Datos Comision</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        @foreach (var item in Model)
+        {
+        <table>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+                <td>
+                    <div>
+
+                        @*<div class="form-group col-md-2">
+                            <label class="font-weight-bold color2" for="tipo_proy">Proyecto</label>
+                            <select class="s2" id="tipo_proy" name="tipo_proy" multiple>
+                                @Html.Partial("_ListaComboBox", ComisionesModels.ComboboxProyectosGeneral(int.Parse(usuario)))
+                            </select>
+                        </div>*@
+
+                        <div class="form-group row">
+                            <label for="comuna_inmob" class="col-md-3 col-form-label font-weight-bold color2">Proyecto</label>
+                            <div class="col-md-9">
+                                <select class="s2" id="tipo_proy" name="tipo_proy">
+                                    <option></option>
+                                    @{
+                                    List
+                                    <listascombobox>
+                                        lst_pry = ComisionesModels.ComboboxProyectosGeneral(int.Parse(usuario));
+                                        foreach (var item3 in lst_pry)
+                                        {
+                                        <option value="@item3.id" @(item.id_pry= =item3.id.ToString() ? "selected" : "" )>@item3.descripcion</option>
+                                        }
+                                        }
+                                </select>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="id_pry" name="id_pry" value="@item.id_pry" />
+                        <div class="form-group row">
+                            <label for="p_com_inmob" class="col-md-3 col-form-label font-weight-bold color2">Porcentaje Comisión</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control porcentaje" id="p_com_inmob" name="p_com_inmob" value="@item.p_com_inmob" />
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="b_com_inmob" class="col-md-3 col-form-label font-weight-bold color2">Comisión aplicable a:</label>
+                            <div class="col-md-9">
+                                <table>
+                                    <tr>
+                                        <td><input type="radio" class="real" id="b_com_inmob" name="b_com_inmob" value="0" @(item.b_com_inmob= ="0" ? "checked" : "" ) />Valor Lista</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="radio" class="alzado" id="b_com_inmob" name="b_com_inmob" value="1" @(item.b_com_inmob= ="1" ? "checked" : "" ) />Valor Promesa</td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="comuna_inmob" class="col-md-3 col-form-label font-weight-bold color2">Forma Pago</label>
+                            <div class="col-md-9">
+                                <select class="s2" id="form_pag" name="form_pag">
+                                    <option></option>
+                                    @{
+                                    List
+                                    <listascombobox>
+                                        lst22 = ComisionesModels.ListasCombobox(116, null);
+                                        foreach (var item2 in lst22)
+                                        {
+                                        <option value="@item2.id" @(item.forma_pago= =item2.id.ToString() ? "selected" : "" )>@item2.descripcion</option>
+                                        }
+                                        }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="b_com_inmob" class="col-md-3 col-form-label font-weight-bold color2">Condiciones:</label>
+                            <div class="col-md-9">
+                                <textarea rows="5" style="width:340px;resize:none" id="condiciones_comisiones" name="condiciones_comisiones">@item.condiciones_comisiones</textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </td>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+                <td>
+                    <div class="form-group row">
+                        <label for="rut_facturacion" class="col-md-3 col-form-label font-weight-bold color2">RUT</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control rut" id="rut_facturacion" name="rut_facturacion" value="@item.rut_facturacion" />
+                            <div class="invalid-feedback">RUT inválido</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="razon_social_facturacion" class="col-md-3 col-form-label font-weight-bold color2">Razón Social</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="razon_social_facturacion" name="razon_social_facturacion" value="@item.razon_social_facturacion" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="giro_facturacion" class="col-md-3 col-form-label font-weight-bold color2">Giro</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="giro_facturacion" name="giro_facturacion" value="@item.giro_facturacion" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="direccion_facturacion" class="col-md-3 col-form-label font-weight-bold color2">Dirección</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="direccion_facturacion" name="direccion_facturacion" value="@item.direccion_facturacion" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="comuna_facturacion" class="col-md-3 col-form-label font-weight-bold color2">Comuna</label>
+                        <div class="col-md-9">
+                            <select class="s2" id="comuna_facturacion" name="comuna_facturacion">
+                                <option></option>
+                                @{
+                                List
+                                <listascombobox>
+                                    lst44 = ComisionesModels.ListasCombobox(5, null);
+                                    foreach (var item2 in lst44)
+                                    {
+                                    <option value="@item2.id" @(item.comuna_facturacion= =item2.id.ToString() ? "selected" : "" )>@item2.descripcion</option>
+                                    }
+                                    }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="contacto_facturacion" class="col-md-3 col-form-label font-weight-bold color2">Dirección</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="contacto_facturacion" name="contacto_facturacion" value="@item.contacto_facturacion" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="flag_facturacion" class="col-md-3 col-form-label font-weight-bold color2">Facturable a:</label>
+                        <div class="col-md-9">
+                            <table>
+                                <tr>
+                                    <td><input type="radio" class="fac_inmob" id="flag_facturacion" name="flag_facturacion" value="0" @(item.flag_facturacion= ="0" ? "checked" : "" ) />Inmobiliaria</td>
+                                </tr>
+                                <tr>
+                                    <td><input type="radio" class="fac_proy" id="flag_facturacion" name="flag_facturacion" value="1" @(item.flag_facturacion= ="1" ? "checked" : "" ) />Proyecto</td>
+                                </tr>
+                            </table>
+
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        }
+    </div>
+    <div class="modal-footer">
+        <div class="text-center w-100">
+            <button type="button" class="btn btn-color2 px-4 mx-3" id="btn_guardar_proy">Guardar</button>
+            <button type="button" class="btn btn-secondary px-4 mx-3" data-dismiss="modal">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        $("input.rut").rut({
+            useThousandsSeparator: true,
+            validateOn: 'change',
+        }).on('rutInvalido', function (e) {
+            var $input = $(this);
+            if ($input.val().length > 0 || $input.prop('required')) {
+                $input.addClass('is-invalid');
+                $input.next('.invalid-feedback').show();
+                $input.focus();
+            } else {
+                $input.removeClass('is-invalid');
+                $input.next('.invalid-feedback').hide();
+            }
+        }).on('rutValido', function (e, rut, dv) {
+            var $input = $(this);
+            $input.removeClass('is-invalid');
+            $input.next('.invalid-feedback').hide();
+        });
+    </script>

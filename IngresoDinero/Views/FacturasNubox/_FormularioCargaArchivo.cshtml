@@ -1,0 +1,83 @@
+﻿<style>
+    .ImagenesSubir {
+        transition: all .5s ease-in-out;
+        filter: opacity(.4);
+        cursor: pointer;
+    }
+
+        .ImagenesSubir:hover {
+            transition: all .5s ease-in-out;
+            filter: opacity(1);
+        }
+</style>
+<form action="" method="post" name="formulario_add_facturas" id="formulario_add_facturas">
+    <div class="text-center w-100" id="icono_carga">
+        <br /><br />
+        <span style="margin: 50px; font-weight: 900;">Click en la Imagen para subir archivo PDF.</span>
+        <br />
+        <br />
+        <br />
+        <img src="~/img/cloud-upload-signal.svg" style="width: 100px;" class="ImagenesSubir" />
+        <br />
+        <br />
+        <input type="file" id="ArchivoFactura" name="ArchivoFactura" style="visibility: hidden;" accept=".pdf" />
+    </div>
+    <div class="text-center w-100" id="icono_cargando">
+        <br />
+        <br />
+        <br />
+        <img src="~/img/cargando.gif" style="width: 100px; height: 100px;" />
+        <br />
+        <br />
+        <br />
+    </div>
+    <div id="ResultadoDeCarga"></div>
+</form>
+<script>
+
+    $("#icono_carga").show();
+    $("#icono_cargando").hide();
+
+    $(".ImagenesSubir").click(function () {
+        $("#ArchivoFactura").click();
+    });
+
+    $("#ArchivoFactura").change(function () {
+
+        $("#icono_carga").hide();
+        $("#icono_cargando").show();
+
+        var data = new FormData();
+
+        var archivo = $(this).get(0).files;
+
+        if (archivo.length > 0) { data.append("archivo", archivo[0]); }
+
+        var $inputFile = $(this);
+        $inputFile.wrap('<form>').closest('form').get(0).reset();
+        $inputFile.unwrap();
+
+        var subir2 = $.ajax({
+            type: "POST",
+            url: "@Url.Action("_ResultadoCargarArchivos", "FacturasNubox")",
+            contentType: false,
+            processData: false,
+            data: data
+        });
+
+        subir2.done(function (xhr, textStatus) {
+            $("#icono_cargando").hide();
+            $("#ResultadoDeCarga").html(xhr);
+            $('#Modal_Carga_Facturas').modal('show');
+            $('#Modal_Carga_Facturas').modal('handleUpdate');
+        });
+
+        subir2.fail(function () {
+            alert('Error al procesar este documento. Por favor, inténtelo más tarde.');
+            $("#icono_carga").show();
+            $("#icono_cargando").hide();
+        });
+
+    });
+
+</script>

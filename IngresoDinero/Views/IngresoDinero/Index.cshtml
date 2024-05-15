@@ -1,0 +1,1883 @@
+﻿@using IngresoDinero.Helpers;
+@using IngresoDinero.Models;
+@using IngresoDinero.clases;
+@{
+    ViewBag.Title = "Index";
+
+    int id_usu = int.Parse(Request.Cookies["cookiePerfil"]["usuario"].ToString());
+    int idPerfil = int.Parse(Request.Cookies["cookiePerfil"]["perfil"].ToString());
+    int idSubper = int.Parse(Request.Cookies["cookiePerfil"]["idSubper"].ToString());
+    int idArea = int.Parse(Request.Cookies["cookiePerfil"]["idArea"].ToString());
+
+    //int id_usu = 10008;
+    //int idPerfil = 10;
+    //int idSubper = 6;
+    //int idArea = 8;
+
+    int cliente = 0;
+    int estado = 0;
+    int forma_pago = 0;
+
+    List<perfilamiento> itemselect = ComisionesModels.Llama_Perfilamiento_Filtros_Default_Front(id_usu, "INGRESO_DINERO", "PRINCIPAL");
+
+    string[] select_estado_promesa = itemselect[0].g_estado_promesa.Split(',');
+    string[] select_estado_factura = itemselect[0].g_estado_factura.Split(',');
+
+    DateTime fecha = DateTime.Now;
+    DateTime fechahasta = DateTime.Now.AddYears(3);
+    string fec = fecha.ToString("yyyy-MM");
+    string fechasta = fechahasta.ToString("yyyy-MM");
+    string fec_hoy = fechahasta.ToString("yyyy-MM-dd");//fecha.ToString("yyyy-MM-dd");
+    string fecha_mesantes = fecha.ToString("yyyy-MM-01");//fecha.AddMonths(-1).ToString("yyyy-MM-01");
+}
+<style>
+    .boton {
+        background-color: #FF7219;
+        border: none;
+        color: white;
+        padding: 5px 15px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        cursor: pointer;
+        font-family: Arial;
+        border-radius: 5px;
+    }
+
+    .boton2 {
+        background-color: #F73526;
+        border: none;
+        color: white;
+        padding: 5px 15px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        cursor: pointer;
+        font-family: Arial;
+        border-radius: 5px;
+    }
+
+    .boton3 {
+        background-color: #3C8AF8;
+        border: none;
+        color: white;
+        padding: 5px 15px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        cursor: pointer;
+        font-family: Arial;
+        border-radius: 5px;
+    }
+
+    span.select2-container, #fecha_desde, #fecha_hasta {
+        font-size: 14px;
+    }
+</style>
+<style type="text/css">
+    .bootstrap-tagsinput {
+        width: 100%;
+    }
+
+    .label-info {
+        background-color: #17a2b8;
+    }
+
+    .label {
+        display: inline-block;
+        padding: .25em .4em;
+        font-size: 75%;
+        font-weight: 700;
+        line-height: 1;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: .25rem;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out, border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+</style>
+
+<div class="container-fluid pt-3 pb-3">
+    <h3 class="text-uppercase font-weight-bold text-center pt-3">Ingreso <span class="color2">de DINERO</span></h3>
+    <hr class="mb-4 mx-auto">
+    <ul class="nav nav-tabs nav-color2" role="tablist" id="tabs">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="linkListado" data-toggle="tab" href="#tabListado" role="tab" aria-controls="tabListado" aria-selected="true">Listado</a>
+        </li>
+    </ul>
+
+    <div class="tab-content p-3" id="tab-content1">
+        <div class="tab-pane show active" id="tabListado" role="tabpanel" aria-labelledby="linkListado">
+            <div class="mb-4">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="font-weight-bold color2" for="cliente">Cliente</label>
+                        <select class="s2" id="cliente" name="cliente" multiple>
+                            @Html.Partial("_ListaComboBox", MaestrosModel.ComboboxClienteGeneral())
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="font-weight-bold color2" for="estado">Estado</label>
+                        <select class="s2" id="estado" name="estado" multiple>
+                            @{
+                                List<listascombobox> lst22 = ComisionesModels.ListasCombobox(124, null);
+                                foreach (var item2 in lst22)
+                                {
+                                    <option value="@item2.id" @(select_estado_promesa.Any(i => i == item2.id.ToString()) ? "selected" : "")>@item2.descripcion</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="font-weight-bold color2" for="estado">Tipo</label>
+                        <select class="s2" id="tipo" name="tipo" multiple>
+                            @{
+                                List<listascombobox> lst33 = ComisionesModels.ListasCombobox(123, null);
+                                foreach (var item2 in lst33)
+                                {
+                                    if ((idPerfil == 14 || idPerfil == 22) && id_usu != 10168 && id_usu != 100388)
+                                    {
+                                        if (item2.id == 7 || item2.id == 11 || item2.id == 8 || item2.id == 24)
+                                        {
+                                            <option value="@item2.id" @(select_estado_promesa.Any(i => i == item2.id.ToString()) ? "selected" : "")>@item2.descripcion</option>
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="@item2.id" @(select_estado_promesa.Any(i => i == item2.id.ToString()) ? "selected" : "")>@item2.descripcion</option>
+
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="font-weight-bold color2" for="forma_pago">Forma Pago</label>
+                        <select class="s2" id="forma_pago" name="forma_pago" style="color: #666666; width:99%;" multiple>
+                            @{
+                                List<listascombobox> lst2 = ComisionesModels.ListasCombobox(8, null);
+                                foreach (var item2 in lst2)
+                                {
+                                    <option value="@item2.id" @(select_estado_factura.Any(i => i == item2.id.ToString()) ? "selected" : "") style="font-size:12px">@item2.descripcion</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="font-weight-bold color2" for="fecha_desde">Fecha Desde</label>
+                        <input type="month" class="form-control" id="fecha_desde" name="fecha_desde" value="@fec" />
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="font-weight-bold color2" for="fecha_hasta">Fecha Hasta</label>
+                        <input type="month" class="form-control" id="fecha_hasta" name="fecha_hasta" value="@fechasta" />
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="font-weight-bold color2" for="empresa">Empresa</label>
+                        <select class="s2" id="empresa" name="empresa" style="color: #666666; width:99%" multiple>
+                            <option value="if">IF</option>
+                            <option value="ldi">LDI</option>
+                            <option value="lp">LP</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="font-weight-bold color2" for="cliente_facturar">Cliente A Facturar</label>
+                        <select class="s2" id="cliente_facturar" name="cliente_facturar" multiple>
+                            @Html.Partial("_ListaComboBox", MaestrosModel.ComboboxClienteGeneralAFacturar())
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="font-weight-bold color2" for="cliente_facturar">ID Cotización</label>
+                        <input type="text" data-role="tagsinput" name="tags" class="form-control" id="ids_cot">
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label>&nbsp;</label>
+                        <button type="button" id="btnBuscar" class="btn btn-color2 text-uppercase d-block">
+                            <img src="~/Img/lupa.png" />
+                            <span style="font-size:12px;">Buscar</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="celda_form" style="margin-top:5px;">
+                    <a onclick="modal_datos_proyecto(0)" style="cursor: pointer; font-weight: bold;">
+                        <img src="~/images/add1-.png" width="16" height="16" />
+                        <span class="auto-style44">
+                            Nuevo Ingreso
+                        </span>
+                    </a>
+                </div>
+                <input type="checkbox" id="chk_facturados" name="chk_facturados" /> Ingresos Facturados &nbsp;
+                <input type="checkbox" id="chk_regularizados" name="chk_regularizados" /> Incluir Ingresos Regularizados
+            </div>
+            <div class="mb-4" id="cuadroComisiones">
+            </div>
+            @*<div class="float-md-left">
+                    @using (Html.BeginForm("ExportarExcel", "Comisiones", FormMethod.Post, new { id = "FormExcel", name = "FormExcel" }))
+                    {
+                        <input type="hidden" name="id_promesa2" id="id_promesa2" value="0" />
+                        <input type="hidden" name="id_proyecto2" id="id_proyecto2" value="0" />
+                        <input type="hidden" name="id_estado_factura2" id="id_estado_factura2" value="0" />
+                        <input type="hidden" name="id_estado_promesa2" id="id_estado_promesa2" value="0" />
+                        <input type="hidden" name="idFormato" id="idFormato" />
+                        <input type="hidden" name="grilla" value="COMISIONES_INMOBILIARIA_PRINCIPAL" />
+                        <input type="hidden" name="FechaIni" id="FechaIni" value="0" />
+                        <input type="hidden" name="FechaFin" id="FechaFin" value="0" />
+
+                        <div style="margin-top: 10px; font-size: 14px; cursor: pointer;" onclick="excel('excel',500,284)">
+                            <img title="Exportar a Excel" src="~/img/excel.png">&nbsp;Exportar Excel&nbsp;
+                        </div>
+                    }
+                </div>*@
+            <div class="text-center" hidden>
+                <boton class="boton3 btn btn-color2 text-uppercase" id="btn_comision" onclick="modal_datos_proyecto(1061)">Comision Proyecto</boton>
+                @if (idPerfil != 14 || id_usu == 10168 || id_usu == 100388)
+                {
+                    if (idPerfil == 10 || idArea == 8 || id_usu == 10168 || id_usu == 100388)
+                    {
+                        <boton class="boton btn btn-color2 text-uppercase cambiar_estado_comision" id="btn_ver_inmob" estado="8">Verificacion Inmobiliaria</boton>
+                        <boton class="boton btn btn-color2 text-uppercase cambiar_estado_comision" id="btn_sol_aprob" estado="2">Solicitar Aprobacion Facturación</boton>
+
+                    }
+
+                    if (idSubper == 6 || idPerfil == 1 || id_usu == 10168 || id_usu == 100388)
+                    {
+                        <boton class="boton btn btn-color2 text-uppercase cambiar_estado_comision" id="btn_aprob" estado="3">Aprobar Factura</boton>
+                        <boton class="boton btn btn-color2 text-uppercase cambiar_estado_comision" id="btn_aprob" estado="9">Ok Operaciones</boton>
+                        <boton class="boton2 btn btn-color2 text-uppercase cambiar_estado_comision" id="btn_rech" estado="6">Rechazar</boton>
+                    }
+
+                    if (idPerfil == 10 || idArea == 8 || id_usu == 10168 || id_usu == 100388)
+                    {
+                        <boton class="boton btn btn-color2 text-uppercase cambiar_estado_comision" id="btn_fac" estado="4">Facturar</boton>
+                        <boton class="boton btn btn-color2 text-uppercase cambiar_estado_comision" id="btn_cob" estado="5">Cobrar</boton>
+                    }
+                }
+                @*<boton class="boton3 btn btn-color2 text-uppercase" id="btn_cargar_facturas">Carga Facturas Nubox</boton>*@
+            </div>
+            <div class="text-center">
+                <div class="celda accion" id="botones_transferencia" style="border:1px solid #ccc; padding:5px; background:#eeefff;">
+
+                    @if (idPerfil != 14 || id_usu == 10168 || id_usu == 100388)
+                    {
+                        if (idArea == 5 || idArea == 7 || id_usu == 10008 || id_usu == 10168 || id_usu == 100388)
+                        {
+                            <botton type="button" id="btn_Verificacion_Finanzas" class="boton btn_cambio_estado2" style="width:200px; margin-left:25px ; margin-top:10px ">Verificacion Finanzas</botton>
+                            <botton id="btn_Solicitud_Devolucion" estado="8" class="boton btn_cambio_estado2" style="width:200px; margin-left:15px; margin-top:10px ">Solicitud Devolucion</botton>
+                            <botton id="btn_Solicitud_TF" estado="11" class="boton btn_cambio_estado2" style="width:200px; margin-left:15px;margin-top:10px ">Solicitud T/F</botton>
+                        }
+                        if (idArea == 8 || idArea == 7 || id_usu == 10008 || id_usu == 10168 || id_usu == 100388) //FINANZAS
+                        {
+                            <botton id="btn_Rechazo_Finanza" estado="3" class="boton btn_cambio_estado2" style="width:200px; margin-left:15px; margin-top:10px ">Rechazo Finanza</botton>
+                            <botton id="btn_Custodia" estado="4" class="boton btn_cambio_estado2" style="width:200px; margin-left:15px ; margin-top:10px">OK Finanza</botton>
+                            <botton id="btn_Depositado" estado="5" class="boton btn_cambio_estado2" style="width:200px; margin-left:15px ">Depositado</botton>
+                            <botton id="btn_Protestado" estado="6" class="boton btn_cambio_estado2" style="width:200px; margin-left:15px ; margin-top:10px">Protestado</botton>
+                            <botton id="btn_Cobrado" estado="7" class="boton btn_cambio_estado2" style="width:200px; margin-left:15px; margin-top:10px ">Cobrado</botton>
+                            <botton id="btn_Devolucion_Rechazada" estado="9" class="boton btn_cambio_estado2" style="width:200px; margin-left:15px ; margin-top:10px">Devolucion Rechazada</botton>
+                            <botton id="btn_Devuelto" estado="10" class="boton btn_cambio_estado2" style="width:200px; margin-left:15px ">Devuelto</botton>
+                            <botton id="btn_TF_Rechazada" estado="12" class="boton btn_cambio_estado2" style="width:200px; margin-left:15px ; margin-top:10px">T/F Rechazada</botton>
+                            <botton id="btn_Transferido" estado="13" class="boton btn_cambio_estado2" style="width:200px; margin-left:15px ; margin-top:10px">Transferido</botton>
+
+
+                        }
+                        if (idArea == 8 || idArea == 7 || id_usu == 10008 || id_usu == 10016 || id_usu == 10168 || id_usu == 100388)
+                        {
+                            <botton id="btn_Regularizar" estado="22" class="boton3 btn-color2 btn_cambio_estado3" onclick="pop_up_regularizacion()" style="width:200px; margin-left:15px ; margin-top:10px">Regularizar</botton>
+
+                        }
+                        if (idArea == 8 || idArea == 7 || id_usu == 10008 || id_usu == 10168 || id_usu == 100388)
+                        {
+                            <botton id="btn_Facturado" estado="21" class="boton3 btn-color2 btn_cambio_estado2" style="width:200px; margin-left:15px; margin-top:10px ">Facturado</botton>
+                        }
+                        if (idArea == 8 || idArea == 7 ||  idPerfil== 19 || idPerfil==22 || idArea == 5 || new List<int> { 100388, 10168, 10016, 10008, 30230 }.Contains(id_usu))
+                        {
+                            <botton id="btn_Anular" estado="14" class="boton3 btn-color2 btn_cambio_estado2" style="background-color:red; width:200px; margin-left:15px; margin-top:10px ">Anular</botton>
+
+                        }
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Regularización -->
+<div class="modal fade" id="modal_regularizacion" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xxl">
+        <div class="modal-content">
+            <div class="modal-header bg-color2">
+                <h5 class="modal-title font-weight-bold">Regularizar Ingreso #<span class="txt_id_ingreso"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div_cuota" id_ticket=""></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Resultado Estados -->
+<div class="modal fade" id="modal_resultado_estados" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-color2">
+                <h5 class="modal-title"><b>Cambio de estado</b></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="contenido_estados" style="overflow: auto; min-height: 400px;">
+
+                </div>
+                <div class="text-center mt-4">
+                    <button type="button" class="btn btn-color2" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Cambio Estado -->
+<div class="modal fade" id="modal_cambio_estado" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-color2">
+                <h5 class="modal-title"><b id="titulo_cambio_estado">Confirmar cambio de estado</b></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="datos_carga">
+                <div class="text-center">
+                    <label style="font-size:12px;"><b id="desc_fecha_camb_estado">Fecha:&nbsp;&nbsp;</b></label>
+                    <input type="date" id="fecha_estado" name="fecha_estado" value="@DateTime.Now.ToString("yyyy-MM-dd")" style="width: 150px" class="fecha_estado" required />
+                    <input type="text" id="new_estado" value="" disabled hidden /> <br />
+                    <label style="font-size:12px;"><b id="desc_Observacion_camb_estado">Observacion:&nbsp;&nbsp;</b></label>
+                    <input type="text" id="comentario_cambio_estado" name="comentario_cambio_estado" value="" />
+                    <input type="text" name="Flagflujo" id="idFlagFlujo" hidden value="" /><br />
+                    <label style="font-size:12px;" class="facturar_a"><b>Facturar A :</b></label><br />
+                    <select id="facturar_a" class="facturar_a" name="facturar_a">
+                    </select>
+                </div>
+                <div class="text-center mt-4">
+                    <button type="button" class="btn btn-color2 px-4 mx-3" id="btn_cambio_estado" onclick="BtnCambiaEstado()">SI</button>
+                    <button type="button" class="btn btn-secondary px-4 mx-3" data-dismiss="modal">NO</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Historial Estados -->
+<div class="modal fade" id="modal_historial_estados" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-color2">
+                <h5 class="modal-title"><b>Historial de Cambio de Estado</b></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table id="tablaHistorialEstados" style="font-size: 12px;" class="table table-striped table-hover shadow-sm tbl-sm">
+                    <thead class="thead-corp text-center">
+                        <tr>
+                            @*<th>Id Ingreso</th>*@
+                            <th>Usuario</th>
+                            <th>Fecha Observacion</th>
+                            <th>Observacion</th>
+                            <th>Estado Anterior</th>
+                            <th>Estado Nuevo</th>
+                            <th>Fecha Cambio Estado</th>
+                            <th>Mensaje</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div class="text-center mt-4">
+                    <button type="button" class="btn btn-color2" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDatosPry" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+@*<div id="agregar_comentario" class="modal" style="width: 500px; height:250px; border: 1px solid #ccc; color: #666677; font-size:12px; display:none; padding-top:10px">
+        <div id="contenido_comentario">
+
+        </div>
+        <div style="width:99%; text-align:center;  margin-top: 20px;">
+            <div class="celda ancho" style="width:100px; margin-left:10px">
+                <div class="boton" style="width:70px;" id="grabar_observacion">Grabar</div>
+            </div>
+            <div class="celda ancho" style="width:100px; margin-left:10px">
+                <div class="boton" style="width:70px;" onClick="cerrar_ventana('#agregar_comentario')">Cerrar</div>
+            </div>
+        </div>
+    </div>*@
+
+<!-- Modal Comentarios -->
+<div class="modal fade" id="modal_agregar_comentario" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-color2">
+                <h5 class="modal-title"><b>Comentario</b></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="cont_comentario"></div>
+                <div class="text-center mt-4">
+                    <button type="button" class="btn btn-color2" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Comentarios (viejo) -->
+@*<div id="agregar_comentario" class="modal" style="width: 600px; height:300px; border: 1px solid #ccc; color: #666677; font-size:12px; display:none; padding:20px; overflow-y:scroll">
+        <div id="cont_comentario">
+
+        </div>
+        <div style="width:99%; text-align:center;  margin-top: 5px;">
+            <div class="celda ancho" style="width:100px; margin-left:10px">
+                <div class="boton" style="width:70px;" onClick="cerrar_ventana('#agregar_comentario')">Cerrar</div>
+            </div>
+        </div>
+    </div>*@
+
+@*Carga Facturas*@
+<div class="modal fade" id="Modal_Carga_Facturas" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xxl">
+        <div class="modal-content">
+            <div class="modal-header bg-color2">
+                <h5 class="modal-title font-weight-bold">Cargar Facturas Nubox</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="datos_carga_nubox">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-color2" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Excel -->
+<div class="modal fade" id="modal_excel" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-color2">
+                <h5 class="modal-title"><b>Formatos de exportación</b></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="f_inicio" class="col-sm-4 col-form-label"><b>Fecha inicio</b></label>
+                            <div class="col-sm-8">
+                                <input type="date" class="form-control" id="f_inicio" name="f_inicio" value="@fecha_mesantes">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="f_inicio" class="col-sm-4 col-form-label"><b>Fecha fin</b></label>
+                            <div class="col-sm-8">
+                                <input type="date" class="form-control" id="f_hasta" name="f_hasta" value="@fec_hoy">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div id="formatosExcel"></div>
+                <div class="text-center mt-4">
+                    <button type="button" class="btn btn-secondary px-4 mx-3" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-color2 px-4 mx-3" id="exportar_excel_Interfaz">Exportar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        var baseUrl = '@Url.AbsoluteAction("Index", "IngresoDinero")';
+    </script>
+    <script src="@Url.VersionedContent("~/Scripts/IngresoDinero.js")"></script>
+    <script>
+
+        $(function () {
+
+            $('select.s2').select2({
+                placeholder: "Seleccione...",
+                allowClear: true
+            });
+
+            $("#exportar_excel").click(function () {
+                $("#idFormato").val($(".radioFormatoExcel:checked").val());
+
+                var id_pry = $("#tipoproy").val();
+                var id_estado_promesa = $("#estado_prom").val();
+                var id_estado_factura = $("#estado_fac").val();
+
+                id_pry = id_pry && id_pry.length > 0 ? id_pry.join('|') : '0';
+                id_estado_promesa = id_estado_promesa && id_estado_promesa.length > 0 ? id_estado_promesa.join('|') : '0';
+                id_estado_factura = id_estado_factura && id_estado_factura.length > 0 ? id_estado_factura.join('|') : '0';
+
+                var f_ini = $("#env_desde").val();
+                var f_fin = $("#env_hasta").val();
+
+                $("#FechaIni").val(f_ini + "-01");
+                $("#FechaFin").val(f_fin + "-01");
+                $("#idFormato").val($(".radioFormatoExcel:checked").val());
+                $("#id_proyecto2").val(id_pry);
+                $("#id_estado_factura2").val(id_estado_factura);
+                $("#id_estado_promesa2").val(id_estado_promesa);
+
+                document.FormExcel.submit();
+            });
+
+            $("#FormExceldesc").click(function () {
+                document.FormExceldesc.submit();
+            });
+
+            $(".cambiar_estado_comision").click(function () {
+                var ids_promesas = $("#tabla_ingreso_dinero tbody input.chkComision:checked");
+                var id_promesa = Array.prototype.map.call(ids_promesas, function (x) { return x.value; });
+                if (id_promesa.length <= 0) {
+                    alert("Debe seleccionar previamente una promesa");
+                } else {
+                    var nuevo_estado = $(this).attr("estado");
+                    $("#new_estado_comision").val(nuevo_estado);
+                    $('#modal_cambio_estado').modal('show');
+                }
+            });
+
+            $("#btn_cambio_estado_comision").click(function () {
+                cambiar_estado_comision();
+            });
+
+            $("body").on('change', 'input:file.doc_cobro', function () {
+
+                var id_promesa = $(this).attr("id_promesa");
+
+                var data = new FormData();
+                var archivos = $(this).get(0).files;
+
+                data.append("id_promesa", id_promesa);
+
+                if (archivos.length > 0) {
+
+                    data.append("archivo", archivos[0]);
+                    var subir = $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("Agregar_Archivo", "Comisiones")",
+                        contentType: false,
+                        processData: false,
+                        data: data
+                    });
+
+                    subir.done(function (xhr, textStatus) {
+
+                        var estado = xhr.split('|');
+                        alert(estado[1]);
+
+                        if (estado[0] == 'true') {
+                            recargar_tabla_ingreso_dinero();
+                        }
+
+                    });
+
+                } else {
+                    alert("Debe seleccionar un archivo antes de grabar.")
+                    return false;
+                }
+
+            });
+
+            $('body').on('click', '#btn_guardar_inmob', function () {
+                var $this = $(this);
+
+                var id_inmob = $('#id_inmob').val();
+                var g_rut = $('#g_rut_inmob').val();
+                var g_rut_valid = $.validateRut(g_rut);
+
+                if (g_rut.length > 0) {
+                    if (!g_rut_valid) {
+                        $('#g_rut_inmob').focus();
+                        return;
+                    }
+                }
+
+                var g_razon_social = $('#g_razon_social_inmob').val().trim();
+                var g_giro = $('#g_giro_inmob').val().trim();
+                var g_direccion = $('#g_direccion_inmob').val().trim();
+                var id_comuna = $('#comuna_inmob').val() || '0';
+                var g_contacto = $('#g_contacto_inmob').val().trim();
+
+                var param = {
+                    id_inmob: id_inmob,
+                    g_rut: g_rut,
+                    g_razon_social: g_razon_social,
+                    g_giro: g_giro,
+                    g_direccion: g_direccion,
+                    id_comuna: id_comuna,
+                    g_contacto: g_contacto
+                };
+
+                $.ajax({
+                    data: param,
+                    url: "@Url.Action("ActualizarInmobiliaria", "Comisiones")",
+                    type: "POST",
+                    beforeSend: function () {
+                        $this.prop('disabled', true);
+                    },
+                    success: function (res) {
+                        $this.prop('disabled', false);
+                        alert(res.mensaje);
+                        $('#modalDatosInmob').modal('hide');
+                    },
+                    error: function () {
+                        $this.prop('disabled', false);
+                        alert('Error al guardar!');
+                    }
+                });
+            });
+
+            $('body').on('click', '#btn_guardar_proy', function () {
+                var $this = $(this);
+
+                var b_com_inmob = 0;
+
+                var id_pry = $('#id_pry').val();
+                var p_com_inmob = $('#p_com_inmob').val().replace(",", ".");
+                if (p_com_inmob > 100) {
+                    alert("Porcentaje no puede ser mayor al 100%");
+                    return false;
+                } else if (p_com_inmob <= 0) {
+                    alert("Porcentaje no puede ser menor al 0%");
+                    return false;
+                } else {
+                    if ($(".real").is(":checked")) {
+                        b_com_inmob = 0;
+                    } else if ($(".alzado").is(":checked")) {
+                        b_com_inmob = 1;
+                    } else {
+                        alert("Debe seleccionar a que valor será aplicable la comisión");
+                        return false;
+                    }
+
+                    var forma_pago = $('#form_pag').val() || '0';
+                    var condiciones_comisiones = $("#condiciones_comisiones").val();
+
+                    var rut_facturacion = $('#rut_facturacion').val();
+                    var razon_social_facturacion = $('#razon_social_facturacion').val();
+                    var giro_facturacion = $('#giro_facturacion').val();
+                    var direccion_facturacion = $('#direccion_facturacion').val();
+                    var comuna_facturacion = $('#comuna_facturacion').val();
+                    var contacto_facturacion = $('#contacto_facturacion').val();
+                    var flag_facturacion = 0;
+
+                    if ($(".fac_inmob").is(":checked")) {
+                        flag_facturacion = 0;
+                    } else if ($(".fac_proy").is(":checked")) {
+                        flag_facturacion = 1;
+                    } else {
+                        alert("Debe seleccionar a quien será facturado.");
+                        return false;
+                    }
+
+                    var param = {
+                        id_pry: id_pry,
+                        p_com_inmob: p_com_inmob,
+                        b_com_inmob: b_com_inmob,
+                        forma_pago: forma_pago,
+                        condiciones_comisiones: condiciones_comisiones,
+                        rut_facturacion: rut_facturacion,
+                        razon_social_facturacion: razon_social_facturacion,
+                        giro_facturacion: giro_facturacion,
+                        direccion_facturacion: direccion_facturacion,
+                        comuna_facturacion: comuna_facturacion,
+                        contacto_facturacion: contacto_facturacion,
+                        flag_facturacion: flag_facturacion
+                    };
+
+                    $.ajax({
+                        data: param,
+                        url: "@Url.Action("ActualizarProyecto", "Comisiones")",
+                        type: "POST",
+                        beforeSend: function () {
+                            $this.prop('disabled', true);
+                        },
+                        success: function (res) {
+                            $this.prop('disabled', false);
+                            alert(res.mensaje);
+                            $('#modalDatosPry').modal('hide');
+                            $('#btnBuscar').click();
+                        },
+                        error: function () {
+                            $this.prop('disabled', false);
+                            alert('Error al guardar!');
+                        }
+                    });
+                }
+            });
+
+            function subirArchivoIngreso(id_ing) {
+                return new Promise((resolve, reject) => {
+                    var files = $('#ing_archivo').get(0).files;
+
+                    if (files.length == 0) {
+                        resolve();
+                        return;
+                    }
+
+                    var fd = new FormData();
+                    fd.append('id_ing', id_ing);
+                    fd.append('file', files[0]);
+
+                    var subir = $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("Subir_Archivo_Ingreso", "IngresoDinero")",
+                        contentType: false,
+                        processData: false,
+                        data: fd
+                    });
+
+                    subir.done(function (res) {
+                        if (res.estado) {
+                            resolve();
+                        } else {
+                            alert(res.mensaje);
+                            reject();
+                        }
+                    });
+
+                    subir.fail(function () {
+                        reject();
+                    });
+                });
+            }
+
+            function guardarIngreso(param) {
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        data: JSON.stringify(param),
+                        contentType: 'application/json; charset=UTF-8',
+                        url: "@Url.Action("Ingreso_Guardar_Ingreso", "IngresoDinero")",
+                        type: "POST",
+                        success: function (res) {
+                            if (res.estado) {
+                                resolve(res.id_ing);
+                            } else {
+                                alert(res.mensaje);
+                                reject();
+                            }
+                        },
+                        error: function () {
+                            reject();
+                        }
+                    });
+                });
+            }
+
+            //$('body').on('click', '#btn_guardar_ingreso', async function () {
+            //    var $this = $(this);
+
+            //    var b_com_inmob = 0;
+
+            //    var proc = $('#ing_proc').val();
+            //    var id_ing = $('#id_ing').val();
+            //    var id_tipo = $('#id_tipo_ingreso').val();
+            //    var ing_rut_cliente = $('#ing_rut_cliente').val();
+            //    var ing_nombre_cliente = $('#ing_nombre_cliente').val().trim();
+            //    var ing_g_ape_pat = $('#ing_g_ape_pat').val().trim();
+            //    var ing_g_ape_mat = $('#ing_g_ape_mat').val().trim();
+            //    var id_forma_pago = $('#id_forma_pago').val();
+            //    var id_banco = $('#id_banco').val().trim();
+            //    var g_cta_cte = $('#g_cta_cte').val().trim();
+            //    var g_serie = $('#g_serie').val().trim();
+            //    var ing_monto_uf = $('#ing_monto_uf').val();
+            //    var ing_v_monto = $('#ing_v_monto').val();
+            //    var ing_f_fecha_cambio_estado = $('#ing_f_fecha_cambio_estado').val();
+            //    var ing_g_direccion_cli = $('#ing_g_direccion_cli').val().trim();
+            //    var ing_g_direccion_cli_numero = $('#ing_g_direccion_cli_numero').val().trim();
+            //    var ing_f_vencimiento = $('#ing_f_vencimiento').val();
+            //    var ing_g_observacion_ingreso = $('#ing_g_observacion_ingreso').val().trim();
+
+            //    var id_comuna = $('#ing_g_comuna').val();
+
+            //    if (id_tipo == 0) {
+            //        $('#id_tipo_ingreso').focus();
+            //        return;
+            //    }
+
+            //    if (ing_rut_cliente.length == 0 || !$.validateRut(ing_rut_cliente)) {
+            //        $('#ing_rut_cliente').focus();
+            //        return;
+            //    }
+
+            //    if (ing_nombre_cliente.length == 0) {
+            //        $('#ing_nombre_cliente').focus();
+            //        return;
+            //    }
+
+            //    if (ing_g_ape_pat.length == 0) {
+            //        $('#ing_g_ape_pat').focus();
+            //        return;
+            //    }
+
+            //    if (ing_g_ape_mat.length == 0) {
+            //        $('#ing_g_ape_mat').focus();
+            //        return;
+            //    }
+
+            //    if (id_tipo == 6 && ing_g_observacion_ingreso.length == 0) {
+            //        alert('El campo de Observaciones es obligatorio cuando el Tipo de Ingreso es "Otros"');
+            //        $('#ing_g_observacion_ingreso').focus();
+            //        return;
+            //    }
+            //    if (ing_monto_uf.length == 0 && ing_v_monto.length == 0) {
+            //        alert('Debe Ingresar Minimo un Monto UF o $')
+            //        return;
+            //    }
+
+            //    ing_rut_cliente = ing_rut_cliente.split('.').join('');
+            //    var rutSplit = ing_rut_cliente.split('-');
+            //    var rut = rutSplit[0];
+            //    var g_dv = rutSplit[1];
+
+
+            //    var param = {
+            //        proc: proc,
+            //        id_ing: id_ing,
+            //        id_tipo: id_tipo,
+            //        ing_rut_cliente: rut,
+            //        g_dv: g_dv,
+            //        ing_nombre_cliente: ing_nombre_cliente,
+            //        ing_g_ape_pat: ing_g_ape_pat,
+            //        ing_g_ape_mat: ing_g_ape_mat,
+            //        id_banco: id_banco,
+            //        g_cta_cte: g_cta_cte,
+            //        g_serie: g_serie,
+            //        ing_monto_uf: ing_monto_uf,
+            //        ing_v_monto: ing_v_monto,
+            //        ing_f_fecha_cambio_estado: ing_f_fecha_cambio_estado,
+            //        ing_g_direccion_cli: ing_g_direccion_cli,
+            //        ing_f_vencimiento: ing_f_vencimiento,
+            //        ing_g_observacion_ingreso: ing_g_observacion_ingreso,
+            //        ing_g_direccion_cli_numero: ing_g_direccion_cli_numero,
+            //        id_forma_pago: id_forma_pago,
+            //        id_comuna: id_comuna
+            //    };
+
+            //    try {
+            //        var id_ing = await guardarIngreso(param);
+            //        await subirArchivoIngreso(id_ing);
+            //        alert('Guardado!');
+            //        $('#btnBuscar').click();
+            //        $('#modalDatosPry').modal('hide');
+            //    } catch (e) {
+            //        $('#btnBuscar').click();
+            //        alert('Error al guardar!');
+            //    }
+
+            //});
+
+            $('body').on('change', '#tipo_proy', function () {
+                var id_proy = $("#tipo_proy").val();
+                recargar_datos_proyecto(id_proy);
+            });
+            $('body').on('blur', '.cambiar_valor_uf', function () {
+                var id_prom = $(this).attr("id_prom");
+                var com_uf = $(this).val();
+                var param = {
+                    "id_prom": id_prom,
+                    "comision_uf": com_uf
+                };
+
+                var param = {
+                    id_pry: id_pry,
+
+                };
+
+                $.ajax({
+                    data: param,
+                    url: "@Url.Action("ActualizarComisionUf", "Comisiones")",
+                    type: "POST",
+                    success: function (response) {
+
+                    }
+                });
+            });
+
+            $("botton").click(function () {
+                var id = $(this).attr("id");
+                if (id == "btn_Verificacion_Finanzas") {
+                    var estado = 2;
+                    var a = $('#tabla_ingreso_dinero').dataTable().api().column(0, { search: 'applied' }).nodes().to$().find(".chkIngreso:checked"); // chkIngreso[]
+                    var id_ingreso = Array.prototype.map.call(a, function (x) { return x.value; });
+                    if (id_ingreso.length == 0) {
+                        alert("Seleccione un ingreso o más")
+                        return;
+                    }
+                    traer_clientes_a_facturar(id_ingreso[0]);
+                    confirmar_cambio_estado(estado);
+                }
+                if (id == "btn_Rechazo_Finanza") {
+                    var estado = 3;
+                    confirmar_cambio_estado(estado);
+                }
+                if (id == "btn_Custodia") {
+                    var estado = 4;
+                    confirmar_cambio_estado(estado);
+                }
+                if (id == "btn_Depositado") {
+                    var estado = 5;
+                    confirmar_cambio_estado(estado);
+                }
+                if (id == "btn_Protestado") {
+                    var estado = 6;
+                    confirmar_cambio_estado(estado);
+                }
+                if (id == "btn_Cobrado") {
+                    var estado = 7;
+                    confirmar_cambio_estado(estado);
+                }
+                if (id == "btn_Solicitud_Devolucion") {
+                    var estado = 8;
+                    confirmar_cambio_estado(estado);
+                }
+                if (id == "btn_Devolucion_Rechazada") {
+                    var estado = 9;
+                    confirmar_cambio_estado(estado);
+                }
+                if (id == "btn_Devuelto") {
+                    var estado = 10;
+                    confirmar_cambio_estado(estado);
+                }
+                if (id == "btn_Solicitud_TF") {
+                    var estado = 11;
+                    confirmar_cambio_estado(estado);
+                }
+                if (id == "btn_TF_Rechazada") {
+                    var estado = 12;
+                    confirmar_cambio_estado(estado);
+                }
+                if (id == "btn_Transferido") {
+                    var estado = 13;
+                    confirmar_cambio_estado(estado);
+                }
+                if (id == "btn_Anular") {
+                    var estado = 14;
+                    confirmar_cambio_estado(estado);
+                }
+               if (id == "btn_Facturado") {
+                    var estado = 21;
+                    confirmar_cambio_estado(estado);
+                }
+            })
+
+
+            $("select[name=cliente]").change(function () {
+                cliente = $('select[name=cliente]').val();
+
+            });
+            $("select[name=estado]").change(function () {
+                estado = $('select[name=estado]').val();
+            });
+            $("select[name=forma_pago]").change(function () {
+                forma_pago = $('select[name=forma_pago]').val();
+            });
+        });
+
+        function traer_clientes_a_facturar(ing) {
+            $("#facturar_a").html("");
+            $.ajax({
+                data: {
+                    "id_ing": ing
+                },
+                url: "@Url.Action("Carga_Clientes_A_Facturar", "IngresoDinero")",
+                type: "get",
+                success: function (response) {
+                    $("#facturar_a").append("<option value='0'>Seleccione</option>")
+                    $.each(response, function (index, val) {
+                        $("#facturar_a").append("<option value=" + val["id"] + ">" + val["descripcion"] + "</option>");
+                    })
+
+                }
+            });
+        }
+
+
+        function modal_datos_proyecto(id_ingreso) {
+
+            recargar_datos_proyecto(id_pry);
+            $('#modalDatosPry').modal('show');
+        }
+        function recargar_datos_proyecto(id_ingreso) {
+            var id_ingreso = id_ingreso;
+
+            var param = {
+                "id_ingreso": id_ingreso
+            };
+
+            var $div = $('#modalDatosPry .modal-content');
+            $.ajax({
+                type: "get",
+                url: baseUrl + "IngresoDinero/_Agregar_Ingreso_Dinero",
+                data: param,
+                beforeSend: function () {
+                    $div.html('<div class="modal-body"><strong class="text-center">Un momento por favor...</strong></div>');
+                },
+                success: function (response) {
+                    $div.html(response);
+
+                    $('select.s2').select2({
+                        placeholder: "Seleccione...",
+                        allowClear: true
+                    });
+                    ;
+                },
+                error: function () {
+                    $div.html('<div class="modal-body"><strong class="text-center">Error al procesar su petición</strong></div>');
+                }
+            });
+        }
+
+        @*$('body').on('click', '#btn_guardar_proy', function () {
+                var $this = $(this);
+
+                var b_com_inmob = 0;
+
+                var id_pry = $('#id_pry').val();
+                var p_com_inmob = $('#p_com_inmob').val().replace(",",".");
+                if (p_com_inmob > 100) {
+                    alert("Porcentaje no puede ser mayor al 100%");
+                    return false;
+                } else if (p_com_inmob <=0) {
+                    alert("Porcentaje no puede ser menor al 0%");
+                    return false;
+                } else {
+                    if ($(".real").is(":checked")) {
+                        b_com_inmob = 0;
+                    } else if ($(".alzado").is(":checked")) {
+                        b_com_inmob = 1;
+                    } else {
+                        alert("Debe seleccionar a que valor será aplicable la comisión");
+                        return false;
+                    }
+
+                    var forma_pago = $('#form_pag').val() || '0';
+                    var condiciones_comisiones = $("#condiciones_comisiones").val();
+
+                    var rut_facturacion = $('#rut_facturacion').val();
+                    var razon_social_facturacion = $('#razon_social_facturacion').val();
+                    var giro_facturacion = $('#giro_facturacion').val();
+                    var direccion_facturacion = $('#direccion_facturacion').val();
+                    var comuna_facturacion = $('#comuna_facturacion').val();
+                    var contacto_facturacion = $('#contacto_facturacion').val();
+                    var flag_facturacion = 0;
+
+                    if ($(".fac_inmob").is(":checked")) {
+                        flag_facturacion = 0;
+                    } else if ($(".fac_proy").is(":checked")) {
+                        flag_facturacion = 1;
+                    } else {
+                        alert("Debe seleccionar a quien será facturado.");
+                        return false;
+                    }
+
+                    var param = {
+                        id_pry: id_pry,
+                        p_com_inmob: p_com_inmob,
+                        b_com_inmob: b_com_inmob,
+                        forma_pago: forma_pago,
+                        condiciones_comisiones: condiciones_comisiones,
+                        rut_facturacion: rut_facturacion,
+                        razon_social_facturacion: razon_social_facturacion,
+                        giro_facturacion: giro_facturacion,
+                        direccion_facturacion: direccion_facturacion,
+                        comuna_facturacion: comuna_facturacion,
+                        contacto_facturacion: contacto_facturacion,
+                        flag_facturacion: flag_facturacion
+                    };
+
+                    $.ajax({
+                        data: param,
+                        url: "@Url.Action("ActualizarProyecto", "Comisiones")",
+                        type: "POST",
+                        beforeSend: function () {
+                            $this.prop('disabled', true);
+                        },
+                        success: function (res) {
+                            $this.prop('disabled', false);
+                            alert(res.mensaje);
+                            $('#modalDatosPry').modal('hide');
+                            $('#btnBuscar').click();
+                        },
+                        error: function () {
+                            $this.prop('disabled', false);
+                            alert('Error al guardar!');
+                        }
+                    });
+                }
+            });*@
+
+        function cerrar_ventana2(pVentana) {
+            $('body').removeClass('modal-wrapper');
+            $("#fade").css("display", "none");
+            $(pVentana).css("display", "none");
+            location.reload();
+        }
+
+        function pop_up2(pVentana, pAncho, pAlto) {
+
+            var ancho = pAncho;
+            var alto = pAlto;
+            anchoActual = window.innerWidth;
+            altoActual = window.innerHeight;
+
+            margenTop = (((altoActual - alto - 40) / altoActual) / 2) * 100
+            porcTop = margenTop + '%';
+            margenLeft = (((anchoActual - ancho - 50) / anchoActual) / 2) * 100
+            porcLeft = margenLeft + '%';
+
+            if (altoActual < alto + 40) {
+                //alert("")
+                $(pVentana).css("top", "5px");
+            } else {
+                $(pVentana).css("top", porcTop);
+            }
+
+            //			alert("pVentana:" + pVentana)
+            //			alert(porcLeft)
+            if (anchoActual < ancho) {
+                $(pVentana).css("left", 0);
+                $(pVentana).css("width", "100%");
+            } else {
+                $(pVentana).css("left", porcLeft);
+            }
+
+            if (parseInt(window.innerHeight) > parseInt($("body").height())) {
+                $("#fade").height(parseInt(window.innerHeight));
+            } else {
+                $("#fade").height(parseInt($("body").height()));
+            }
+            $("#fade").css("display", "block");
+            $(pVentana).css("display", "block");
+        }
+
+        function cerrar_ventana(pVentana) {
+            $("#fade").css("display", "none");
+            $(pVentana).css("display", "none");
+        }
+
+        function pop_up(pVentana, pAncho, pAlto) {
+
+            var ancho = pAncho;
+            var alto = pAlto;
+            anchoActual = window.innerWidth;
+            altoActual = window.innerHeight;
+
+            margenTop = (((altoActual - alto - 40) / altoActual) / 2) * 100
+            porcTop = margenTop + '%';
+            margenLeft = (((anchoActual - ancho - 50) / anchoActual) / 2) * 100
+            porcLeft = margenLeft + '%';
+
+            if (altoActual < alto + 40) {
+                $(pVentana).css("top", "5px");
+            } else {
+                $(pVentana).css("top", porcTop);
+            }
+
+            if (anchoActual < ancho) {
+                $(pVentana).css("left", 0);
+                $(pVentana).css("width", "100%");
+            } else {
+                $(pVentana).css("left", porcLeft);
+            }
+
+            if (parseInt(window.innerHeight) > parseInt($("body").height())) {
+                $("#fade").height(parseInt(window.innerHeight));
+            } else {
+                $("#fade").height(parseInt($("body").height()));
+            }
+            $("#fade").css("display", "block");
+            $(pVentana).css("display", "block");
+        }
+        function cerrar_ventana_estado(pVentana) {
+            $('body').removeClass('modal-wrapper');
+            $("#fade").css("display", "none");
+            $(pVentana).css("display", "none");
+            document.location = '@Url.Action("index","Comisiones")';
+        }
+
+        function pop_up3(pVentana, fade) {
+            window.scrollTo(0, 0);
+            $('body').addClass('modal-wrapper');
+
+            if (fade) {
+                $('#fade').show();
+            }
+
+            $('.modal3').hide();
+            $(pVentana).show();
+        }
+
+        function pop_up_regularizacion() {
+
+            var a = $('#tabla_ingreso_dinero').dataTable().api().column(0, { search: 'applied' }).nodes().to$().find(".chkIngreso:checked"); // chkIngreso[]
+            var id_ingreso = Array.prototype.map.call(a, function (x) { return x.value; });
+            //var id_estado_pago = a.attr("estado");
+
+            // Verica que existan registros seleccionados
+            if (id_ingreso.length > 1) {
+                alert("¡Operación NO se puede realizar sobre una selección múltiple, favor marque solo un elemento!");
+                return false;
+            }
+            if (id_ingreso.length < 1) {
+                alert("¡Debe seleccionar un elemento!");
+                return false;
+            }
+            if (a.data('estado') != 6 && a.data('estado') != 2) {
+                alert("Ingreso debe estar en estado Protestado o Verificacion Finanza");
+                return false;
+            }
+            // Fin VERIFICACION
+
+            //if (id_estado_pago == 35 || id_estado_pago == 40 || id_estado_pago == 50 || id_estado_pago == 60) {
+            //    alert("No es posible regularizar este pago ya que se encuentra liberado o en un estado posterior.");
+            //    return false;
+            //}
+
+            var param = { "id_ingreso": id_ingreso[0] };
+            $.ajax({
+                data: param,
+                url: "@Url.Action("_Ingreso_Regularizacion", "IngresoDinero")",
+                type: "get",
+                async: true,
+                beforeSend: function () {
+                    $("#div_cuota").html("Un momento por favor.");
+                },
+                success: function (response) {
+                    $("#div_cuota").html(response);
+                }
+            });
+
+            $('#modal_regularizacion').modal('show');
+            $('#modal_regularizacion .txt_id_ingreso').text(id_ingreso[0]);
+        }
+
+
+
+        function cambiar_estado_comision() {
+            var id_estado_factura = $("#new_estado_comision").val();
+            var ids_promesas = $("#tabla_ingreso_dinero tbody input.chkComision:checked");
+
+            var id_promesa = Array.prototype.map.call(ids_promesas, function (x) { return x.value; });
+            var fecha = $("#fecha_estado_comision").val();
+
+            //alert(id_promesa);
+            $('#modal_cambio_estado').modal('hide');
+            if (id_promesa.length >= 1) {
+                var param = {
+                    "id_promesa": id_promesa.join('|'),
+                    "id_estado_factura": id_estado_factura,
+                    "fecha": fecha
+                }
+                $.ajax({
+                    data: param,
+                    url: "@Url.Action("_CambiarEstadoComision", "Comisiones")",
+                    type: "POST",
+                    beforeSend: function () {
+
+                    },
+                    success: function (response) {
+                        $('#modal_resultado_cambio_estado').modal('show');
+                        $("#contenido_modal_resultado_cambio_estado").html(response);
+                    }
+                });
+            }
+        }
+
+        function confirmar_cambio_estado(estado_nuevo) {
+           // debugger
+
+            var fecha = new Date(); //Fecha actual
+            var mes = fecha.getMonth() + 1; //obteniendo mes
+            var dia = fecha.getDate(); //obteniendo dia
+            var ano = fecha.getFullYear(); //obteniendo año
+            $("#fecha_estado").val(ano + "-" + mes + "-" + dia);
+            //document.getElementById('new_estado').value = estado_nuevo;
+
+            if (dia < 10) {
+                dia = '0' + dia; //agrega cero si el menor de 10
+            }
+            if (mes < 10) {
+                mes = '0' + mes//agrega cero si el menor de 10
+            }
+
+            //if (confirm("¿Confirmar Cambio de Estado?     " + mes)) {
+            //    cambiar_estado_pago(ne);
+            //};
+            $("#fecha_estado").attr("readonly", false);
+            if (estado_nuevo == 20 || estado_nuevo == 30) {
+                $("#fecha_estado").attr("readonly", true);
+                $("#fecha_estado").val(ano + "-" + mes + "-" + dia);
+            }
+
+            $("#desc_fecha_camb_estado").html("Fecha : ");
+            $("#titulo_cambio_estado").html("Confirmar cambio estado");
+            @* $("#fecha_estado").val("@fec2");*@
+
+        //if (estado_nuevo == 32 || estado_nuevo == 45 || estado_nuevo == 55) {
+        //        pop_up("#modal_cambio_estado_rechazo", 700, 500);
+        //        $("#fade").css("display", "none");
+        //    } else {
+
+                if (estado_nuevo == 2) {
+                    $("#desc_fecha_camb_estado").html("Fecha de Cambio Estado : ");
+                    $("#titulo_cambio_estado").html("Confirmar Verificacion Finanza");
+                    $(".facturar_a").show();
+                    $("#new_estado").val(2);
+                    $("#fecha_estado").val("");
+                }
+                if (estado_nuevo == 3) {
+                    $("#desc_fecha_camb_estado").html("Fecha de Cambio Estado : ");
+                    $("#titulo_cambio_estado").html("Confirmar Rechazo Finanza");
+                    $(".facturar_a").hide();
+                    $("#new_estado").val(3);
+                    $("#fecha_estado").val("");
+                }
+                if (estado_nuevo == 4) {
+                    $("#desc_fecha_camb_estado").html("Fecha de Cambio Estado : ");
+                    $("#titulo_cambio_estado").html("Confirmar Estado Custodia");
+                    $(".facturar_a").hide();
+                    $("#new_estado").val(4);
+                    $("#fecha_estado").val("");
+                }
+                if (estado_nuevo == 5) {
+                    $("#desc_fecha_camb_estado").html("Fecha de Cambio Estado : ");
+                    $("#titulo_cambio_estado").html("Confirmar Estado Depositado");
+                    $(".facturar_a").hide();
+                    $("#new_estado").val(5);
+                    $("#fecha_estado").val("");
+                }
+                if (estado_nuevo == 6) {
+                    $("#desc_fecha_camb_estado").html("Fecha de Cambio Estado : ");
+                    $("#titulo_cambio_estado").html("Confirmar Estado Protestado");
+                    $(".facturar_a").hide();
+                    $("#new_estado").val(6);
+                    $("#fecha_estado").val("");
+                }
+                if (estado_nuevo == 7) {
+                    $("#desc_fecha_camb_estado").html("Fecha de Cambio Estado : ");
+                    $("#titulo_cambio_estado").html("Confirmar Estado Cobrado");
+                    $(".facturar_a").hide();
+                    $("#new_estado").val(7);
+                    $("#fecha_estado").val("");
+                 }
+                if (estado_nuevo == 8) {
+                    $("#desc_fecha_camb_estado").html("Fecha de Cambio Estado : ");
+                    $("#titulo_cambio_estado").html("Confirmar Solicitud Devolucion");
+                    $(".facturar_a").hide();
+                    $("#new_estado").val(8);
+                    $("#fecha_estado").val("");
+                }
+                if (estado_nuevo == 9) {
+                    $("#desc_fecha_camb_estado").html("Fecha de Cambio Estado : ");
+                    $("#titulo_cambio_estado").html("Confirmar Estado Devolucion Rechazada");
+                    $(".facturar_a").hide();
+                    $("#new_estado").val(9);
+                    $("#fecha_estado").val("");
+                    $("#idFlagFlujo").val(1);
+                }
+                if (estado_nuevo == 10) {
+                    $("#desc_fecha_camb_estado").html("Fecha de Cambio Estado : ");
+                    $("#titulo_cambio_estado").html("Confirmar Estado Devuelto");
+                    $("#new_estado").val(10);
+                    $("#fecha_estado").val("");
+                    $("#idFlagFlujo").val(1);
+                }
+                if (estado_nuevo == 11) {
+                    $("#desc_fecha_camb_estado").html("Fecha de Cambio Estado : ");
+                    $("#titulo_cambio_estado").html("Confirmar Estado Solicitud T/F");
+                    $(".facturar_a").hide();
+                    $("#new_estado").val(11);
+                    $("#fecha_estado").val("");
+                    $("#idFlagFlujo").val(1);
+                }
+                if (estado_nuevo == 12) {
+                    $("#desc_fecha_camb_estado").html("Fecha de Cambio Estado : ");
+                    $("#titulo_cambio_estado").html("Confirmar Estado T/F Rechazada");
+                    $(".facturar_a").hide();
+                    $("#new_estado").val(12);
+                    $("#fecha_estado").val("");
+                    $("#idFlagFlujo").val(1);
+                }
+                if (estado_nuevo == 13) {
+                    $("#desc_fecha_camb_estado").html("Fecha de Cambio Estado : ");
+                    $("#titulo_cambio_estado").html("Confirmar Estado Transferido");
+                    $(".facturar_a").hide();
+                    $("#new_estado").val(13);
+                    $("#fecha_estado").val("");
+                    $("#idFlagFlujo").val(1);
+                }
+                if (estado_nuevo == 14) {
+                    $("#desc_fecha_camb_estado").html("Fecha de Cambio Estado : ");
+                    $("#titulo_cambio_estado").html("Confirmar Verificacion Finanza");
+                    $(".facturar_a").hide();
+                    $("#new_estado").val(14);
+                    $("#fecha_estado").val("");
+                }
+                if (estado_nuevo == 21) {
+                    $("#desc_fecha_camb_estado").html("Fecha de Cambio Estado : ");
+                    $("#titulo_cambio_estado").html("Confirmar Factura");
+                    $(".facturar_a").hide();
+                    $("#new_estado").val(21);
+                    $("#fecha_estado").val("");
+                    //$("#idFlagFlujo").val(1);
+                }
+
+            $('#modal_cambio_estado').modal('show');
+        }
+
+        function observprop(id_ingreso, pAncho, pAlto) {
+            $('#modal_agregar_comentario').modal('show');
+            var param = { "id_ingreso": id_ingreso };
+
+            $.ajax({
+                data: param,
+                url: "@Url.Action("_ObservacionesIngresoDinero", "IngresoDinero")",
+                type: "get",
+                beforeSend: function(){
+                    $("#cont_comentario").html("Un momento por favor.");
+                },
+                success: function (response) {
+                    $("#cont_comentario").html(response);
+                }
+            });
+        }
+
+        function recargar_datos_inmobiliaria(id_inmob) {
+            var id_inmob = id_inmob;
+
+            var param = {
+                "id_inmob": id_inmob
+            };
+
+            $('#modalDatosInmob').modal('show');
+
+            var $div = $('#modalDatosInmob .modal-content');
+            $.ajax({
+                type: "POST",
+                url: baseUrl + "Comisiones/_ListaDatosInmobiliaria",
+                data: param,
+                beforeSend: function () {
+                    $div.html('<div class="modal-body"><strong class="text-center">Un momento por favor...</strong></div>');
+                },
+                success: function (response) {
+                    $div.html(response);
+
+                    $('select.s2').select2({
+                        placeholder: "Seleccione...",
+                        allowClear: true
+                    });
+
+                },
+                error: function () {
+                    $div.html('<div class="modal-body"><strong class="text-center">Error al procesar su petición</strong></div>');
+                }
+            });
+        }
+
+        function modal_datos_proyecto(id_pry) {
+
+            recargar_datos_proyecto(id_pry);
+            $('#modalDatosPry').modal('show');
+        }
+
+
+
+
+        function pop_upGeneraInterfazExcel() {
+
+            $('#modal_excel').modal('show');           
+
+            var fechainicio = $("#f_inicio").val();
+            var fechafin = $("#f_hasta").val();
+            var param = {
+                "grilla": "INGRESO_DINERO",
+                "fechaI": fechainicio,
+                "fechaF": fechafin
+            }
+
+
+            $.ajax({
+                url: "@Url.Action("FormatosExcelInterfaz", "IngresoDinero")",
+                data:  param,       // { grilla: "tabla", fecha1: fechainicio, fecha2: fechafin  },
+                type: "get",
+                beforeSend: function () {
+                    $("#formatosExcel").html('<h5 class="text-center">Un momento por favor.</h5>');
+                },
+                success: function (data) {
+                    if (data.resp.length > 0) {
+                        $("#formatosExcel").empty();
+
+                        data.resp.map(function (obj) {
+                            var fila = [];
+                            fila.push('<input type="radio" value="' + obj.id + '" id="radioFormatoExcel_' + obj.id + '" name="radioFormatoExcel" class="radioFormatoExcel custom-control-input color2" />');
+                            fila.push('<label class="custom-control-label" for="radioFormatoExcel_' + obj.id + '"><b>' + obj.nombre + '</b></label>');
+                            $("#formatosExcel").append('<div class="custom-control custom-radio">' + fila.join('') + '</div>');
+                        });
+                    }
+                },
+                error: function () {
+                    $("#formatosExcel").html('<h5 class="text-center">Error al procesar la solicitud</h5>');
+                }
+            });
+
+        }
+
+        function BtnCambiaEstado() {
+
+            var IdEstado = $("#new_estado").val();
+            var fechacambio = $("#fecha_estado").val();
+            var comentario = $("#comentario_cambio_estado").val();
+            //document.getElementsByName("chkIngreso[]").hide;
+            var a = $('#tabla_ingreso_dinero').dataTable().api().column(0, { search: 'applied' }).nodes().to$().find(".chkIngreso:checked"); // chkIngreso[]
+            var id_ingreso = Array.prototype.map.call(a, function (x) { return x.value; });
+            var seleccionado = id_ingreso.length > 0;
+            var chk_seleccionados = id_ingreso.join('|');
+            var rut_facturar = $("#facturar_a").val();
+
+            if (fechacambio == "") {
+                alert('Debe ingresar una fecha de estado.');
+                return;
+            }
+
+            if (comentario.length == 0) {
+                alert('De ingresar una observación.');
+                return;
+            }
+
+            if (!seleccionado) {
+                alert('Por favor seleccionar minimo una fila ');
+            } else {
+                var idesta = parseInt(IdEstado);
+                var param = {
+                    chk_seleccionados: chk_seleccionados,
+                    IdEstado: idesta,
+                    fecha: fechacambio,
+                    comentario: comentario,
+                    rut_facturar: rut_facturar
+                };
+
+                $('#modal_cambio_estado').modal('hide');
+                setTimeout(function () {
+                    $('#modal_resultado_estados').modal('show');
+                }, 500);
+
+                 //pop_up2("#resultado_estados", 640, 480);
+
+                //var flag = $("#idFlagFlujo").val();
+
+             //   if (flag == 1) {
+                      @*$.ajax({
+                        type: "POST",
+                        url: "@Url.Action("_Cambia_Estado_Ingreso_Dinero_2_Cobros", "IngresoDinero")",
+                        data: param,
+                        beforeSend: function () {
+                            $("#contenido_estados").html("<h3>Un momento por favor</h3>");
+                        },
+                        success: function (response) {
+                            $("#contenido_estados").html(response);
+                        },
+                        error: function () {
+                            $("#contenido_estados").html("<h3>Error al procesar su petición</h3>");
+                        }
+                        });*@
+             //   }
+              //  else {
+                      $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("_Cambia_Estado_Ingreso_Dinero", "IngresoDinero")",
+                        data: param,
+                        beforeSend: function () {
+                            $("#contenido_estados").html("<h3>Un momento por favor</h3>");
+                        },
+                        success: function (response) {
+                            $("#contenido_estados").html(response);
+                            $('#btnBuscar').trigger('click');
+                        },
+                        error: function () {
+                            $("#contenido_estados").html("<h3>Error al procesar su petición</h3>");
+                        }
+                        });
+               // }
+             }
+
+
+        }
+
+
+        function GuardaIdIngreso(IdEstado) {
+            var a = $('#tabla_ingreso_dinero').dataTable().api().column(0, { search: 'applied' }).nodes().to$().find(".chkIngreso:checked"); // chkIngreso[]
+            var id_ingreso = Array.prototype.map.call(a, function (x) { return x.value; });
+            var seleccionado = id_ingreso.length > 0;
+            var chk_seleccionados = id_ingreso.join('|');
+
+            if (!seleccionado) {
+                alert('Por favor seleccionar minimo una fila ');
+            } else {
+                var idesta = parseInt(IdEstado);
+                var param = {
+                    chk_seleccionados: chk_seleccionados,
+                    IdEstado: idesta,
+                };
+
+                 $.ajax({
+                    data: param,
+                    url: "@Url.Action("Cambia_Estado_Ingreso_Dinero", "IngresoDinero")",
+                    type: "POST",
+                    success: function (response) {
+                        alert('Estado Cambiado Correctamente');
+                        location.reload();
+                        return;
+                    }
+                 });
+             }
+
+
+        }
+
+
+        $("#exportar_excel_Interfaz").click(function () {
+            $("#idFormatoInterfazCobro").val($(".radioFormatoExcel:checked").val());
+            $("#FechaInicialInterfaz").val($("#f_inicio").val());
+            $("#FechaFinalInterfaz").val($("#f_hasta").val());
+
+            if ($('select[name=cliente_facturar]').val() == undefined) {
+                $('#ClienteInterfaz').val(0);
+            }
+            else {
+                $('#ClienteInterfaz').val($('select[name=cliente_facturar]').val());
+            }
+            if ($('select[name=estado]').val() == undefined) {
+                $('#EstadoInterfaz').val(0);
+            }
+            else {
+                $('#EstadoInterfaz').val($('select[name=estado]').val());
+            }
+            if ($('select[name=forma_pago]').val() == undefined) {
+                $('#FormaPagoInterfaz').val(0);
+            }
+            else {
+                $('#FormaPagoInterfaz').val($('select[name=forma_pago]').val());
+            }
+            if ($('select[name=tipo]').val() == undefined) {
+                $("#idTipoIngreso").val(0);
+            }
+            else {
+                $("#idTipoIngreso").val($("select[name=tipo]").val());
+            }
+            document.FormExcelInterfazIngresoDinero.submit();
+        });
+
+
+//        function recargar_datos_proyecto(id_pry) {
+//            var id_pry = id_pry;
+
+//            var param = {
+//                "id_pry": id_pry
+//            };
+
+//            var $div = $('#modalDatosPry .modal-content');
+//            $.ajax({
+//                type: "POST",
+//                url: baseUrl + "Comisiones/_ListaDatosProyecto",
+//                data: param,
+//                beforeSend: function () {
+//                    $div.html('<div class="modal-body"><strong class="text-center">Un momento por favor...</strong></div>');
+//                },
+//                success: function (response) {
+//                    $div.html(response);
+
+//                    $('select.s2').select2({
+//                        placeholder: "Seleccione...",
+//                        allowClear: true
+//                    });
+//;
+//                },
+//                error: function () {
+//                    $div.html('<div class="modal-body"><strong class="text-center">Error al procesar su petición</strong></div>');
+//                }
+//            });
+//        }
+
+        function historialCambios(id, pAncho, pAlto) {
+            $('#modal_historial_estados').modal('show');
+            $("#tablaHistorialEstados").DataTable().destroy();
+            $("#tablaHistorialEstados tbody tr").remove();
+        $.ajax({
+            data: { "id_ingreso": id },
+            url: "@Url.Action("HistorialObservacionesIngresoDinero", "IngresoDinero")",
+            type: "get",
+            success: function (data) {
+                if (data.resp.length > 0) {
+
+                    data.resp.map(function (obj) {
+                        var fila = [];
+                        //fila.push("<td>" + obj.id_ingreso + "</td>");
+                        fila.push("<td>" + obj.g_nom_usu + "</td>");
+                        fila.push('<td><span style="display:none;">' + obj.f_observacion + '</span>' + obj.f_observacion + '</td>');
+                        fila.push("<td>" + obj.g_observacion + "</td>");
+                        fila.push("<td>" + obj.g_estado_anterior + "</td>");
+                        fila.push("<td>" + obj.g_estado_nuevo + "</td>");
+                        fila.push("<td>" + obj.f_observacion_cambio_estado + "</td>");
+                        fila.push("<td>" + obj.g_mensaje + "</td>");
+
+                        $("#tablaHistorialEstados tbody").append("<tr>" + fila.join('') + "</tr>");
+                    });
+
+                    $("#tablaHistorialEstados").DataTable(
+                    {
+                        "iDisplayLength": 25,
+                        'aoColumnDefs': [{
+                            'bSortable': false,
+                            'aTargets': 0
+                        }],
+                        "order": [[1, 'desc']],
+                        "buttons": [
+                            {
+                                extend: 'colvis',
+                                text: 'Columnas'
+                            },
+                            {
+                                extend: 'excelHtml5',
+                                autoFilter: true,
+                                text: 'Excel',
+                                footer: true,
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                filename: id + '_Historial_Estados_IngresoDinero'
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                orientation: 'landscape',
+                                pageSize: 'LEGAL',
+                                text: 'PDF',
+                                footer: true,
+                                exportOptions: {
+                                    columns: ':visible'
+                                },
+                                filename: id + '_Historial_Estados_IngresoDinero'
+                            }
+                        ],
+                    });
+                }
+            }
+        });
+        }
+
+        function cargar_facturas() {
+            $('#Modal_Carga_Facturas').modal('show');
+
+            $.ajax({
+                url: "@Url.Action("_FormularioCargaArchivo", "FacturasNubox")",
+                type: "POST",
+                beforeSend: function () {
+                    $("#datos_carga_nubox").html('<h5 class="text-center m-4">Un momento por favor.</h5>');
+                },
+                success: function (response) {
+                    $("#datos_carga_nubox").html(response);
+                    $('#Modal_Carga_Facturas').modal('handleUpdate');
+                }
+            });
+        }
+
+        $(document).on('change', 'input.fileFactura', async function() {
+            var $tr = $(this).closest('tr');
+            var id_ing = $tr.find('input.chkIngreso').val();
+            var $folio_factura = $tr.find('td.folio_factura');
+            var $f_facturacion = $tr.find('td.f_facturacion');
+
+            var formData = new FormData();
+            formData.append('id_ing', id_ing);
+            formData.append('archivo', this.files[0]);
+
+            var $inputFile = $(this);
+            $inputFile.prop('disabled', true);
+
+            try {
+                const res = await $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("_CargarArchivoFactura", "FacturasNubox")',
+                    data: formData,
+                    contentType: false,
+                    processData: false
+                });
+
+                if (res && res.length > 0) {
+                    const { folio_factura, f_facturacion, g_factura } = res[0];
+                    $folio_factura.html(folio_factura);
+                    $f_facturacion.html(`${f_facturacion}<a href="${g_factura}" target="_blank" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Ver Factura ${folio_factura}"><i class="fas fa-file-pdf color2 ml-2"></i></a><i class="fas fa-times text-danger eliminarArchivoFactura ml-2" role="button" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Eliminar Factura"></i>`);
+                } else {
+                    alert('No se ha encontrado información de la factura.');
+                }
+            } catch(e) {
+                console.log(e);
+                alert('Error interno');
+            }
+
+            $inputFile.prop('disabled', false);
+            $inputFile.wrap('<form>').closest('form').get(0).reset();
+            $inputFile.unwrap();
+        });
+
+        $(document).on('click', '.eliminarArchivoFactura', async function() {
+            var $tr = $(this).closest('tr');
+            var id_ing = $tr.find('input.chkIngreso').val();
+            var $folio_factura = $tr.find('td.folio_factura');
+            var $f_facturacion = $tr.find('td.f_facturacion');
+
+            if (!confirm(`¿Estás seguro que deseas eliminar la factura #${$folio_factura.text().trim()} del ingreso #${id_ing}?`)) return;
+
+            try {
+                await $.post('@Url.Action("_EliminarArchivoFactura", "FacturasNubox")', { id_ing });
+
+                $folio_factura.html(`<label role="button" data-toggle="tooltip" data-trigger="hover" title="Subir una factura"><input type="file" class="fileFactura d-none" accept=".pdf" /><i class="fas fa-paperclip"></i></label>`);
+                $f_facturacion.html('');
+            } catch(e) {
+                console.log(e);
+                alert('Error interno');
+            }
+        });
+    </script>
+}

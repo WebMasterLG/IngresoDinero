@@ -1,0 +1,378 @@
+﻿.loading {
+    position: fixed;
+    z-index: 99999;
+    height: 2em;
+    width: 2em;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+    /* Transparent Overlay */
+    .loading:before {
+        content: '';
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.3);
+    }
+
+    /* :not(:required) hides these rules from IE9 and below */
+    .loading:not(:required) {
+        /* hide "loading..." text */
+        font: 0/0 a;
+        color: transparent;
+        text-shadow: none;
+        background-color: transparent;
+        border: 0;
+    }
+
+        .loading:not(:required):after {
+            content: '';
+            display: block;
+            font-size: 10px;
+            width: 1em;
+            height: 1em;
+            margin-top: -0.5em;
+            -webkit-animation: spinner 1500ms infinite linear;
+            -moz-animation: spinner 1500ms infinite linear;
+            -ms-animation: spinner 1500ms infinite linear;
+            -o-animation: spinner 1500ms infinite linear;
+            animation: spinner 1500ms infinite linear;
+            border-radius: 0.5em;
+            -webkit-box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.5) -1.5em 0 0 0, rgba(0, 0, 0, 0.5) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
+            box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) -1.5em 0 0 0, rgba(0, 0, 0, 0.75) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
+        }
+
+/* Animation */
+
+@-webkit-keyframes spinner {
+    0% {
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@-moz-keyframes spinner {
+    0% {
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@-o-keyframes spinner {
+    0% {
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spinner {
+    0% {
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.tablaFiniquito td {
+    padding-bottom: 15px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+@font-face {
+    font-family: 'OpenSans-Bold';
+    src: url('../fonts/OpenSans-Semibold.eot');
+    src: url('../fonts/OpenSans-Semibold.eot?#iefix') format('embedded-opentype'), url('../fonts/OpenSans-Semibold.woff') format('woff'), url('../OpenSans-Semibold.ttf') format('truetype'), url('../fonts/OpenSans-Semibold.svg#futura_bk_btbook') format('svg');
+}
+
+@font-face {
+    font-family: 'OpenSans-Regular';
+    src: url('../fonts/OpenSans-Regular.eot');
+    src: url('../fonts/OpenSans-Regular.eot?#iefix') format('embedded-opentype'), url('../fonts/OpenSans-Regular.woff') format('woff'), url('../OpenSans-Regular.ttf') format('truetype'), url('../fonts/OpenSans-Regular.svg#futura_bk_btbook') format('svg');
+}
+
+body {
+    font-family: OpenSans-Regular;
+    color: #666666;
+}
+
+/*		html { 
+	  background: url(img/fondo.jpg) no-repeat center center fixed; 
+	  -webkit-background-size: cover;
+	  -moz-background-size: cover;
+	  -o-background-size: cover;
+	  background-size: cover;
+	} */
+
+input[type="password"], input[type="text"], input[type="number"], textarea, select, input[type="date"] {
+    padding: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-family: OpenSans-Regular;
+    font-size: 12px;
+    width: 85%;
+    background: #fcfcfc;
+    color: #666666;
+    text-align: left;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    -moz-border-radius: 15px;
+    /*para Safari y Chrome*/
+    -webkit-border-radius: 15px;
+}
+
+input[type="textarea"] {
+    border-radius: 0px;
+}
+
+.input_normal {
+    border: 0px solid #ccc;
+    border-radius: 0px;
+    font-size: 16px;
+    background: #fff;
+    padding: 0;
+}
+
+input[readonly] {
+    background-color: #eeefff;
+    border: 1px solid #ccc;
+    color: #666677;
+}
+
+.label {
+    font-size: 12px;
+    padding-left: 10px;
+    margin-top: 5px;
+}
+
+.semitrans {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background-color: rgba(0,0,0,0.15);
+}
+
+.tit_secciones {
+    cursor: pointer;
+}
+
+.logo_inv {
+    float: left;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    cursor: pointer
+}
+
+.logo_if {
+    float: right;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    cursor: pointer
+}
+
+.redondeado {
+    width: 100%;
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+}
+
+.color-corp {
+    color: #ff8000;
+}
+
+.caja_login {
+    border: 2px solid #fff;
+    width: 400px;
+    height: 220px;
+    border-radius: 15px 15px 15px 15px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    /*para Safari y Chrome*/
+    -webkit-border-radius: 5px 5px 5px 5px;
+    background-color: rgba(0,0,0,0.3);
+}
+
+.celda {
+    display: inline-block;
+    vertical-align: top
+}
+
+.boton {
+    font-family: OpenSans-Regular;
+    color: #fff;
+    width: 100px;
+    text-align: center;
+    border: 0;
+    background: #ff8000;
+    border-radius: 15px;
+    padding: 3px 15px 4px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+}
+
+.inm_online {
+    width: 50%;
+    text-align: center;
+    height: 30px;
+    min-width: 680px;
+    margin: 0 auto;
+    margin-top: 20px;
+    font-size: 20px;
+    border: 2px solid #fff;
+    border-radius: 20px;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+}
+
+.opc_home {
+    background: #ff8000;
+    font-size: 12px;
+    font-weight: 500;
+    border-right: 0px solid #fff;
+    padding: 10px;
+    margin-left: 0px;
+    cursor: pointer;
+}
+
+.salmon {
+    color: #ff8000;
+}
+
+.letra_chica {
+    font-size: 14px;
+}
+
+.txt_normal {
+    font-family: OpenSans-Regular;
+    margin-top: 10px;
+    color: #a0a0a0;
+    font-size: 14px;
+    font-stretch: condensed;
+}
+
+.txt_subtit {
+    font-family: OpenSans-Bold;
+    margin-top: 30px;
+    color: #ff8000;
+    font-stretch: extra-expanded;
+    font-size: 18px;
+}
+
+.overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2000px;
+    background: #000;
+    z-index: 1001;
+    opacity: .6;
+    -moz-opacity: 0.75;
+    filter: alpha(opacity=50);
+}
+
+/* estilo para la ventana modal */
+/*.modal {
+    display: none;
+    position: fixed;
+    margin: 0;
+    top: 10%;
+    left: 50%;
+    width: 40%;
+    height: 40%;
+    padding: 15px;
+    background-color: #ffffff;*/
+    /*	color: #333;         */
+    /*z-index: 1002;
+    overflow: auto;
+    box-shadow: 0 0px 10px #AAAAAA;
+    border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;*/
+    /*para Safari y Chrome*/
+    /*-webkit-border-radius: 5px 5px 5px 5px;
+}*/
+/*** Ventana Modal ***/
+
+/* estilo para la ventana modal */
+.modal2 {
+    display: none;
+    position: fixed;
+    margin: 0;
+    top: 10%;
+    left: 50%;
+    width: 40%;
+    height: 40%;
+    padding: 15px;
+    background-color: #ffffff;
+    /*	color: #333;         */
+    z-index: 1002;
+    overflow: auto;
+    box-shadow: 0 0px 10px #AAAAAA;
+    border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    /*para Safari y Chrome*/
+    -webkit-border-radius: 5px 5px 5px 5px;
+}
+/*** Ventana Modal ***/
+
+
+
+

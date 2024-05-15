@@ -1,0 +1,254 @@
+﻿@using IngresoDinero.clases;
+@model IEnumerable<IngresosDinero>
+@{
+    //string idPerfil = Request.Cookies["cookiePerfil"]["perfil"].ToString();
+    string idPerfil = Request.Cookies["cookiePerfil"]["perfil"].ToString();
+    string idArea = Request.Cookies["cookiePerfil"]["idArea"].ToString();
+    int id_usu = int.Parse(Request.Cookies["cookiePerfil"]["usuario"].ToString());
+}
+<table id="tabla_ingreso_dinero" class="table table-striped table-hover shadow-sm tbl-sm">
+    <thead class="thead-corp ">
+        <tr>
+            @if (idPerfil != "14" || id_usu == 10168 || id_usu == 100388)
+            {
+                <th data-orderable="false" style="width: 1%;"><input type="checkbox" id="chk_todos" name="chk_todos" /></th>
+            }
+            else
+            {
+                <th data-orderable="false" style="width: 1%;"><input type="checkbox" hidden id="chk_todos" name="chk_todos" /></th>
+            }
+            <th style="width: 3%;">Ingreso</th>
+            <th>Tipo</th>
+            <th>Fecha</th>
+            <th>N° Cot.</th>
+            <th>Rut</th>
+            <th>Cliente</th>
+            <th>Proyecto</th>
+            <th>Dirección</th>
+            <th>Unidad</th>
+            <th>Monto</th>
+            <th>Forma Pago</th>
+            <th>N° Serie</th>
+            <th>Fecha TF/Ven.</th>
+            <th>Abonable PIE</th>
+            <th>ESTADO</th>
+            <th>Rut Facturar</th>
+            <th>Nombre Facturar</th>
+            <th>N° Fact.</th>
+            <th>Fecha Facturación</th>
+            <th>Empresa</th>
+            <th data-orderable="false">Doc</th>
+            <th data-orderable="false">Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            if ((idPerfil == "14" || idPerfil=="22") && !(id_usu == 10168 || id_usu == 30230 || id_usu == 100388))
+            {
+                if (item.id_tipo == "7" || item.id_tipo == "8" || item.id_tipo == "11")
+                {
+                <tr class="@(item.b_manual == "1" ? "table-warning" : (item.b_regularizado == "1" ? "table-danger" : ""))">
+                    @if (idPerfil != "14" || id_usu == 10168 || id_usu == 100388)
+                    {
+                        <td style="text-align: center;"><input type="checkbox" id="chkIngreso" name="chkIngreso[]" class="chkIngreso" value="@item.id_ing" data-estado="@item.id_estado" /></td>
+                    }
+                    else
+                    {
+                        <td style="text-align: center;"><input type="checkbox" id="chkIngreso" name="chkIngreso[]" hidden class="chkIngreso" value="@item.id_ing" data-estado="@item.id_estado" /></td>
+                    }
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")" title="@(item.b_regularizado== "1"  ? item.id_ing_anterior : "")">
+                        @item.id_ing
+                    </td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">
+                        @if (item.b_regularizado == "1")
+                        {
+                            <span>&nbsp;(R)</span>
+                        }
+                        @if (item.b_manual == "1")
+                        {
+                            <span title="Ingreso Manual">&nbsp;(M)</span>
+                        }
+                        @item.g_tipo
+
+                    </td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")" data-sort="@(string.IsNullOrEmpty(item.f_fecha) ? 0 : DateTime.Parse(item.f_fecha).Ticks / 100000000)">@item.f_fecha.Replace(" 0:00:00", "")</td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">
+                        @if (item.id_folio != "0")
+                        {
+                            if (item.id_tipo_cot == "1")
+                            {
+                                <a href="/Cotizaciones/Cotizaciones/Modificar?idcotizacion=@Encrypt.Base64_Encode(item.id_folio)&tipo=1" data-fancybox data-type="iframe" data-idle-time="false">@item.id_folio</a>
+                            }
+                            else
+                            {
+                                <a href="/CotFlex/Cotizaciones/Modificar?idcotizacion=@(item.id_folio)&tipo=0" data-fancybox data-type="iframe" data-idle-time="false">@item.id_folio</a>
+                            }
+                        }
+                    </td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">@item.rut_cliente</td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">@item.nombre_cliente</td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">@item.g_nom_pry</td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">@item.g_direccion_pry</td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">@item.g_unidad</td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">@item.v_monto</td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">@item.g_forma_pago</td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">@item.g_serie</td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")" data-sort="@(string.IsNullOrEmpty(item.f_vencimiento) ? 0 : DateTime.Parse(item.f_vencimiento).Ticks / 100000000)">@item.f_vencimiento</td>
+                    <td>@item.g_abonable_pie</td>
+                    <td>@item.g_estado</td>
+                    @*<td>@(item.f_facturacion == "1900-01-01" ? "hola" : DateTime.Parse(item.f_facturacion).ToString("yyyy-MM-dd") )</td>*@
+                    <td>@item.rut_facturar</td>
+                    <td>@item.nom_facturar</td>
+                    <td>@item.folio_factura</td>
+                    <td data-sort="@item.f_facturacion">
+                        @item.f_facturacion
+                        @if (!string.IsNullOrEmpty(item.g_factura))
+                        {
+                            <span>&nbsp;<a href="@item.g_factura" target="_blank"><i class="fas fa-file-pdf color2" data-toggle="tooltip" data-placement="top" title="Ver Factura @item.folio_factura"></i></a></span>
+                        }
+                    </td>
+                    <td>@item.g_empresa</td>
+                    <td align="center">
+                        @if (item.g_file != "")
+                        {
+                            <a href="@item.g_file" target="_blank" data-toggle="tooltip" data-placement="top" title="Ver Comprobante"><i class="fas fa-file-pdf color2"></i></a>
+                        }
+                    </td>
+                    <td nowrap="nowrap">
+                        @*<img onClick="pop_up_observaciones('#agregar_comentario',500,250,'',@item.id_ing)" src="~/img/lapiz_azul.png" title="Modificar observación" style="cursor: pointer" height="12">*@
+
+                        <div align="center">
+
+                            <img title="Observaciones" data-toggle="tooltip" data-placement="top" onClick="observprop(@item.id_ing,500,250)" src="~/Img/info_plomo.png" height="15" style="cursor: pointer;" />
+                            <img title="Historial de cambios de Estado" data-toggle="tooltip" data-placement="top" onClick="historialCambios(@item.id_ing,500,250)" src="~/Images/adj.png" height="15" style="cursor: pointer;" />
+                        </div>
+                    </td>
+                </tr>
+                }
+            }
+            else
+            {
+                <tr class="@(item.b_manual == "1" ? "table-warning" : (item.b_regularizado == "1" ? "table-danger" : ""))">
+                    <td style="text-align: center;"><input type="checkbox" id="chkIngreso" name="chkIngreso[]" class="chkIngreso" value="@item.id_ing" data-estado="@item.id_estado" /></td>
+                    <td oonclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8" ? "modal_datos_proyecto("+item.id_ing+")" : "")"  style="@(item.b_manual == "1" ? "cursor:pointer;" : "")" title="@(item.b_regularizado== "1"  ? item.id_ing_anterior : "")">
+                        @item.id_ing
+                    </td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8" ? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">
+                        @if (item.b_regularizado == "1")
+                        {
+                            <span>&nbsp;(R)</span>
+                        }
+                        @if (item.b_manual == "1")
+                        {
+                            <span title="Ingreso Manual">&nbsp;(M)</span>
+                        }
+                        @item.g_tipo
+
+                    </td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")" data-sort="@(string.IsNullOrEmpty(item.f_fecha) ? 0 : DateTime.Parse(item.f_fecha).Ticks / 100000000)">@item.f_fecha.Replace(" 0:00:00", "")</td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">
+                        @if (item.id_folio != "0")
+                        {
+                            if (item.id_tipo_cot == "1")
+                            {
+                                <a href="/Cotizaciones/Cotizaciones/Modificar?idcotizacion=@Encrypt.Base64_Encode(item.id_folio)&tipo=1" data-fancybox data-type="iframe" data-idle-time="false">@item.id_folio</a>
+                            }
+                            else
+                            {
+                                <a href="/CotFlex/Cotizaciones/Modificar?idcotizacion=@(item.id_folio)&tipo=0" data-fancybox data-type="iframe" data-idle-time="false">@item.id_folio</a>
+                            }
+                        }
+                    </td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">@item.rut_cliente</td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">@item.nombre_cliente</td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">@item.g_nom_pry</td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">@item.g_direccion_pry</td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">@item.g_unidad</td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">@item.v_monto</td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">@item.g_forma_pago</td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")">@item.g_serie</td>
+                    <td onclick="@(item.b_manual == "1" || idArea == "5" || idArea == "7" || idArea == "8"? "modal_datos_proyecto("+item.id_ing+")" : "")" style="@(item.b_manual == "1" ? "cursor:pointer;" : "")" data-sort="@(string.IsNullOrEmpty(item.f_vencimiento) ? 0 : DateTime.Parse(item.f_vencimiento).Ticks / 100000000)">@item.f_vencimiento</td>
+                    <td>@item.g_abonable_pie</td>
+                    <td>@item.g_estado</td>
+                    @*<td>@(item.f_facturacion == "1900-01-01" ? "hola" : DateTime.Parse(item.f_facturacion).ToString("yyyy-MM-dd") )</td>*@
+                    <td>@item.rut_facturar</td>
+                    <td>@item.nom_facturar</td>
+                    <td class="folio_factura" data-sort="@item.folio_factura">
+                        @item.folio_factura
+                        @if (string.IsNullOrEmpty(item.g_factura) && item.id_estado != "14") //  && (item.id_tipo == "5" || item.id_tipo == "25" || item.id_tipo == "26")
+                        {
+                            <label role="button" data-toggle="tooltip" data-trigger="hover" title="Subir una factura">
+                                <input type="file" class="fileFactura d-none" accept=".pdf" />
+                                <i class="fas fa-paperclip"></i>
+                            </label>
+                        }
+                    </td>
+                    <td class="f_facturacion" style="white-space: nowrap;" data-sort="@item.f_facturacion">
+                        @item.f_facturacion
+                        @if (!string.IsNullOrEmpty(item.g_factura))
+                        {
+                            <a href="@item.g_factura" target="_blank" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Ver Factura @item.folio_factura"><i class="fas fa-file-pdf color2 ml-2"></i></a>
+                            if (item.id_estado != "14") {
+                                <i class="fas fa-times text-danger eliminarArchivoFactura ml-2" role="button" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="Eliminar Factura"></i>
+                            }
+                        }
+                    </td>
+                    <td>@item.g_empresa</td>
+                    <td align="center">
+                        @if (item.g_file != "")
+                        {
+                            <a href="@item.g_file" target="_blank" data-toggle="tooltip" data-placement="top" title="Ver Comprobante"><i class="fas fa-file-pdf color2"></i></a>
+                        }
+                    </td>
+                    <td nowrap="nowrap">
+                        @*<img onClick="pop_up_observaciones('#agregar_comentario',500,250,'',@item.id_ing)" src="~/img/lapiz_azul.png" title="Modificar observación" style="cursor: pointer" height="12">*@
+
+                        <div align="center">
+
+                            <img title="Observaciones" data-toggle="tooltip" data-placement="top" onClick="observprop(@item.id_ing,500,250)" src="~/Img/info_plomo.png" height="15" style="cursor: pointer;" />
+                            <img title="Historial de cambios de Estado" data-toggle="tooltip" data-placement="top" onClick="historialCambios(@item.id_ing,500,250)" src="~/Images/adj.png" height="15" style="cursor: pointer;" />
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="10" class="text-right"><strong>Subtotal</strong></td>
+            <td colspan="13" class="text-left"><strong id="txt_subtotal_monto"></strong></td>
+        </tr>
+        <tr>
+            <td colspan="10" class="text-right"><strong>Total</strong></td>
+            <td colspan="13" class="text-left"><strong id="txt_total_monto"></strong></td>
+        </tr>
+    </tfoot>
+</table>
+
+
+<div class="mt-4"  @(id_usu == 30230?"hidden":"")>
+    @using (Html.BeginForm("ExportarExcelInterfazIngresoDinero", "IngresoDinero", FormMethod.Post, new { id = "FormExcelInterfazIngresoDinero", name = "FormExcelInterfazIngresoDinero" }))
+    {
+        <input type="hidden" name="idFormatoInterfazCobro" id="idFormatoInterfazCobro" />
+        <input type="hidden" name="FechaInicialInterfaz" id="FechaInicialInterfaz" value="0" />
+        <input type="hidden" name="FechaFinalInterfaz" id="FechaFinalInterfaz" value="0" />
+        <input type="hidden" name="ClienteInterfaz" id="ClienteInterfaz" value="0" />
+        <input type="hidden" name="EstadoInterfaz" id="EstadoInterfaz" value="0" />
+        <input type="hidden" name="FormaPagoInterfaz" id="FormaPagoInterfaz" value="0" />
+        <input type="hidden" name="idTipoIngreso" id="idTipoIngreso" value="0" />
+        <input type="hidden" name="grilla" value="INGRESO_DINERO" />//R
+    }
+    @*<button type="button" id="btn_cobro_generar_interfaz" class="boton btn_generar_interfaz" style="width:200px; margin-left:55px " onclick="pop_upGeneraInterfazExcel('#cobrosexcel',500,300)">Generar Interfaz</button>*@
+    <b class="m-2" style="font-size: 14px; cursor: pointer;" onclick="pop_upGeneraInterfazExcel()">
+        <img title="Exportar a Excel" src="~/img/excel.png">&nbsp;Exportar Excel&nbsp;
+    </b>
+    @if(idPerfil != "14" || id_usu == 10168 || id_usu == 100388)
+    {
+    <button type="button" class="btn btn-color2 m-2" id="btnReciboMultiple">Recibo Dinero</button>
+    <button type="button" class="btn btn-color2 m-2" onclick="cargar_facturas()">Carga Facturas Nubox</button>
+    }
+    <div id="estados">
+
+    </div>
+</div>

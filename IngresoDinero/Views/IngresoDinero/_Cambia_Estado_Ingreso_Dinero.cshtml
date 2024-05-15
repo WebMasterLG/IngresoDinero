@@ -1,0 +1,89 @@
+﻿@model IEnumerable<IngresoDinero.clases.EstadoIngresoDinero>
+<table class="table table-striped table-hover shadow-sm tbl-sm" id="tbl_Resultados_Cambio_Estado">
+    <thead class="thead-corp">
+        <tr>
+            <th>
+                Fecha Cambio
+            </th>
+            <th>
+                Nombre Usuario
+            </th>
+            <th>
+                Mensaje
+            </th>
+            <th>
+                Estado Anterior
+            </th>
+            <th>
+                Nuevo Estado
+            </th>
+            <th>
+                Fecha Estado
+            </th>
+            <th>
+                Monto
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.fechacambioestado)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.g_usu)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.mensaje)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.g_estado_anterior)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.g_estado_nuevo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.f_estado)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.monto)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $(function () {
+        $('#tbl_Resultados_Cambio_Estado').DataTable({
+            "buttons": [
+                {
+                    extend: 'colvis',
+                    text: 'Columnas'
+                },
+                {
+                    extend: 'excelHtml5',
+                    autoFilter: true,
+                    text: 'Excel',
+                    footer: true,
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    filename: '@(ViewBag.fecha)_Cambio_Estado_IngresoDinero'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL',
+                    text: 'PDF',
+                    footer: true,
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    filename: '@(ViewBag.fecha)_Cambio_Estado_IngresoDinero'
+                }
+            ]
+        });
+    });
+</script>
